@@ -37,3 +37,17 @@
         background: white;
     }
 /*slider end*/
+
+/* hamburger-menu start */
+    .hamburger-menu {
+        width: 0%;
+        opacity: 0%;
+        overflow: hidden;
+        transition: all 200ms ease-in-out;
+    }
+    .hamburger-menu.open{
+        width: 100%;
+        opacity: 100%;
+        padding: 24px;
+    }
+/* hamburger-menu end */

@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require('path');
 
 const app = express();
 // CORS
@@ -12,6 +13,9 @@ app.use(cors(corsOptions));
 // bodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// show uploads static file
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // set port & listen
 const PORT = process.env.PORT || 3000;

@@ -3,12 +3,15 @@ module.exports = mongoose => {
       "cars",
       mongoose.Schema(
         {
-          // _id: String,
-          brand: String
+          carId: Number,
+          brand: String,
+          model: {
+            name: String,
+            year: Number
+          }
         },
         { timestamps: true }
       )
     );
-  
     return Car;
 }

@@ -17,11 +17,23 @@
         document.documentElement.classList.remove('dark');
       }
     });
+    // hamburger-menu
+    document.querySelector('.hamburger-button').addEventListener('click', () => {
+      document.querySelector('.hamburger-menu').classList.add('open');
+    });
+    document.querySelector('.menu-close').addEventListener('click', () => {
+      document.querySelector('.hamburger-menu').classList.remove('open');
+    });
+    document.querySelectorAll('.hamburger-menu ul li').forEach((item) => {
+        item.addEventListener('click', () => {
+          document.querySelector('.hamburger-menu').classList.remove('open');
+        });
+    });
   });
 </script>
 
 <template>
-  <header class="w-[100%] px-[50px] xl:px-[20px] md:px-[10px] pt-[16px] md:pt-[10px] pb-[10px] border-b border-1 border-main dark:border-white text-xl lg:text-lg flex items-center justify-between overflow-hidden">
+  <header class="z-2 bg-white dark:bg-dark fixed top-0 left-0 w-[100%] px-[50px] xl:px-[20px] md:px-[10px] pt-[16px] md:pt-[10px] pb-[10px] border-b border-1 border-main dark:border-white text-xl lg:text-lg flex items-center justify-between overflow-hidden">
       <nav class="w-[90%] md:w-[auto] flex items-center gap-[5%] lg:gap-[20px] md:gap-[30px]">
         <div class="flex items-center justify-center gap-[16px] lg:gap-[10px] md:gap-[16px]">
           <img class="max-h-[68px] lg:max-h-[60px] md:max-h-[50px] rounded-[50%]" src="./assets/media/logo.jpg" alt="logo">
@@ -36,11 +48,23 @@
       </nav>
       <div class="w-[10%] md:w-[auto] flex items-center justify-end gap-[24px]">
         <input type="checkbox" id="dark-mode-slider" class="switch">
-        <font-awesome-icon class="hidden sm:block text-[2rem] text-main dark:text-second" icon="fa-solid fa-bars" />
+        <font-awesome-icon class="hamburger-button hidden sm:block text-[2rem] text-main dark:text-second" icon="fa-solid fa-bars" />
       </div>
   </header>
 
-  <RouterView />
+  <aside class="z-3 hamburger-menu fixed top-0 right-0 bg-white dark:bg-dark h-full">
+    <div class="w-full flex justify-end text-[24px] text-second"><font-awesome-icon class="menu-close" icon="fa-solid fa-xmark" /></div>
+    <ul class="flex flex-col gap-[10px]">
+      <li class="flex gap-2 text-main dark:text-white text-[20px]"><RouterLink to="/"><font-awesome-icon icon="fa-solid fa-home" /> <span>Anasayfa</span></RouterLink></li>
+      <li class="flex gap-2 text-main dark:text-white text-[20px]"><RouterLink to="/cars"><font-awesome-icon icon="fa-solid fa-car" /> <span>Arabalar</span></RouterLink></li>
+      <li class="flex gap-2 text-main dark:text-white text-[20px]"><RouterLink to="/about"><font-awesome-icon icon="fa-solid fa-circle-info" /> <span>Hakkımızda</span></RouterLink></li>
+      <li class="flex gap-2 text-main dark:text-white text-[20px]"><RouterLink to="/contact"><font-awesome-icon icon="fa-solid fa-headset" /> <span>İletişim</span></RouterLink></li>
+    </ul>
+  </aside>
+
+  <main class="pt-[110px] lg:pt-[100px] md:pt-[80px] sm:pt-[75px]">
+    <RouterView/>
+  </main>
 </template>
 
 <style scoped>
