@@ -4,11 +4,13 @@ module.exports = mongoose => {
       mongoose.Schema(
         {
           carId: Number,
+          title: String,
           brand: String,
           model: {
             name: String,
             year: Number
-          }
+          },
+          image: String
         },
         { timestamps: true }
       )
