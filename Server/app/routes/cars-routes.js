@@ -19,6 +19,9 @@ module.exports = app => {
   
     // Delete all Cars
     router.delete("/", cars.deleteAll);
+
+    // Get car detail with id
+    router.get("/detail/:id", cars.getCarDetail);
   
     app.use('/api/cars', router);
 };
