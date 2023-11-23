@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import axios from 'axios';
+import { fetchData } from '../scripts/ajax.js'
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -15,12 +15,15 @@ const getImageUrl = (filename) => {
 };
 
 onMounted(async () => {
-  try {
-    const res = await axios.get('http://localhost:3000/api/cars/published');
-    cars.value = res.data;
-  } catch (err) {
-    console.error(err);
-  }
+  fetchData(
+    'published',
+    (data) => {
+      cars.value = data;
+    },
+    (error) => {
+      console.error('Bir hata oluştu:', error);
+    }
+  );
 });
 </script>
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { fetchData } from '../scripts/ajax.js';
 
 const router = useRouter();
 const carId = ref(null);
@@ -12,18 +12,17 @@ onMounted(() => {
   if (router.currentRoute.value.params && router.currentRoute.value.params.carId) {
     carId.value = router.currentRoute.value.params.carId;
     console.log(carId.value);
-    fetchData(carId.value);
+    fetchData(
+      `detail/${carId.value}`,
+      (data) => {
+        console.log(data);
+      },
+      (error) => {
+        console.error('Bir hata oluştu:', error);
+      }
+    );
   }
 });
-
-const fetchData = async (carId) => {
-    try {
-        const res = await axios.get(`http://localhost:3000/api/cars/detail/${carId}`);
-        console.log(res.data);
-    } catch (err) {
-        console.error(err);
-    }
-};
 </script>
 
 <template>
