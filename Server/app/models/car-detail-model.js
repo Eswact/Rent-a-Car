@@ -4,7 +4,16 @@ module.exports = mongoose => {
       mongoose.Schema(
         {
           carId: Number,
+          images: Array,
           title: String,
+          description: String,
+          people: Number,
+          capacity: Number,
+          gasoline: Number,
+          kilometer: Number,
+          age: Number,
+          payment: Number,
+          dailyPrice: Number
         },
         { timestamps: true }
       )
