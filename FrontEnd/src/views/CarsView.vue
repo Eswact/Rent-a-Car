@@ -2,16 +2,13 @@
 import { onMounted, ref } from 'vue'
 import { fetchData } from '../scripts/ajax.js'
 import { useRouter } from 'vue-router';
+import { getImageUrl } from '../scripts/common.js';
 
 const router = useRouter();
 const cars = ref([]);
 
 const getDetailsPage = (carId) => {
   router.push({ path: `/detail/${carId}` });
-};
-
-const getImageUrl = (filename) => {
-  return `http://localhost:3000/uploads/${filename}`;
 };
 
 onMounted(async () => {

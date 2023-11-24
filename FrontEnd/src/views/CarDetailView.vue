@@ -2,20 +2,21 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { fetchData } from '../scripts/ajax.js';
+import { getImageUrl } from '../scripts/common.js';
+
 
 const router = useRouter();
 const carId = ref(null);
+const carDetail = ref(null);
 
 onMounted(() => {
-  // Vue Router'dan carId parametresini al
-  console.log(router.currentRoute.value.params);
-  if (router.currentRoute.value.params && router.currentRoute.value.params.carId) {
+  if (router.currentRoute.value.params.carId) {
     carId.value = router.currentRoute.value.params.carId;
-    console.log(carId.value);
     fetchData(
       `detail/${carId.value}`,
       (data) => {
-        console.log(data);
+        carDetail.value = data;
+        console.log(carDetail.value);
       },
       (error) => {
         console.error('Bir hata oluştu:', error);
@@ -26,7 +27,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <h1>Detail page</h1>
+  <div class="car-details w-full p-[12px] flex items-center justify-center">
+    <template v-if="carDetail">
+      <div v-for="image in carDetail.images" :key="image">
+        <img :src="getImageUrl(image)">
+      </div>
+      <div>
+        <h1>{{ carDetail.title }}</h1>
+        <p>{{ carDetail.description }}</p>
+        <p>{{ carDetail.price }}</p>
+      </div>
+    </template>
+    <template v-else>
+      <p>Loading...</p>
+    </template>
   </div>
 </template>
