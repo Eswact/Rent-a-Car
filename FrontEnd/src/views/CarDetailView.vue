@@ -41,15 +41,15 @@ onMounted(() => {
 
 <template>
   <div v-if="carDetail" class="car-details w-full p-[12px] flex items-center justify-center">
-      <div class="flex flex-col gap-[10px] w-[50%]">
+      <div class="flex flex-col gap-[10px] w-[50%] box-border px-[4%]">
         <div class="w-full">
-          <img v-for="image in carDetail.images" :key="image" class="car-image" :src="getImageUrl(image)">
+          <img v-for="image in carDetail.images" :key="image" class="car-image w-full" :src="getImageUrl(image)">
         </div>
         <div class="w-full flex gap-[4%]">
           <img v-for="image in carDetail.images" :key="image" class="image-option" :src="getImageUrl(image)">
         </div>
       </div>
-      <div>
+      <div class="w-[50%] pl-[10px]">
         <h1>{{ carDetail.title }}</h1>
         <p>{{ carDetail.description }}</p>
         <p>{{ carDetail.price }}</p>
@@ -77,7 +77,8 @@ onMounted(() => {
   }
   .image-option.selected {
     border: 2px solid #ddd;
-    opacity: 65%;
+    opacity: 75%;
+    filter: grayscale(50%);
     border-radius: 6px;
   }
 </style>
