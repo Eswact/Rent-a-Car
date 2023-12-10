@@ -40,10 +40,10 @@
           <h1 class="text-[2rem] lg:text-[1.75rem] md:text-[1.5rem] sm:text-[1.75rem] font-medium text-main dark:text-white">Rent<span class="text-second font-semibold">E</span>ren</h1>
         </div>
         <ul class="flex items-center gap-[28px] xl:gap-[10px] md:gap-[20px] text-main dark:text-white sm:hidden">
-          <li><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-home" /> <span class="md:hidden">Anasayfa</span></RouterLink></li>
-          <li><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/cars"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-car" /> <span class="md:hidden">Arabalar</span></RouterLink></li>
-          <li><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/about"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-circle-info" /> <span class="md:hidden">Hakkımızda</span></RouterLink></li>
-          <li><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/contact"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-headset" /> <span class="md:hidden">İletişim</span></RouterLink></li>
+          <li :class="{ 'active': $route.path === '/' }"><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-home" /> <span class="md:hidden">Anasayfa</span></RouterLink></li>
+          <li :class="{ 'active': $route.path === '/cars' || $route.path.includes('/detail/') }"><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/cars"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-car" /> <span class="md:hidden">Arabalar</span></RouterLink></li>
+          <li :class="{ 'active': $route.path === '/about' }"><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/about"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-circle-info" /> <span class="md:hidden">Hakkımızda</span></RouterLink></li>
+          <li :class="{ 'active': $route.path === '/contact' }"><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/contact"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-headset" /> <span class="md:hidden">İletişim</span></RouterLink></li>
         </ul>
       </nav>
       <div class="w-[10%] md:w-[auto] flex items-center justify-end gap-[24px]">
@@ -68,4 +68,7 @@
 </template>
 
 <style scoped>
+  .active {
+    color: #EE605F;
+  }
 </style>
