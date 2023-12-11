@@ -8,5 +8,6 @@ db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.cars = require("./car-model.js")(mongoose);
 db.carDetails = require("./car-detail-model.js")(mongoose);
+db.brands = require("./brand-model.js")(mongoose);
 
 module.exports = db;
