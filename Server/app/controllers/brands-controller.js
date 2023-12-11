@@ -2,7 +2,7 @@ const db = require("../models");
 const brands = db.brands;
 
 // Get all brands from the database.
-exports.findBrands = async (req, res) => {
+exports.findAll = async (req, res) => {
     try {
       const brandsData = await brands.find();
       res.json(brandsData);

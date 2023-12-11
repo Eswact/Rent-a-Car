@@ -42,4 +42,7 @@ db.mongoose
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Server." });
 });
-require("./app/routes/cars-routes")(app);
+const carsRoutes = require("./app/routes/cars-routes");
+const brandsRoutes = require("./app/routes/brands-routes");
+app.use("/api/cars", carsRoutes);
+app.use("/api/brands", brandsRoutes);
