@@ -6,6 +6,11 @@ module.exports = mongoose => {
           carId: Number,
           images: Array,
           title: String,
+          brand: Number,
+          model: {
+            name: String,
+            year: Number
+          },
           description: String,
           people: Number,
           capacity: Number,

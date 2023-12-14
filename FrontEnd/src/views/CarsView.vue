@@ -13,7 +13,7 @@ const getDetailsPage = (carId) => {
 
 onMounted(async () => {
   fetchData(
-    'published',
+    'cars/published',
     (data) => {
       cars.value = data;
     },
