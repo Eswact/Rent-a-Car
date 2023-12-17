@@ -33,7 +33,7 @@
 </script>
 
 <template>
-  <header class="z-2 bg-white dark:bg-dark fixed top-0 left-0 w-[100%] px-[50px] xl:px-[20px] md:px-[10px] pt-[16px] md:pt-[10px] pb-[10px] border-b border-1 border-main dark:border-white text-xl lg:text-lg flex items-center justify-between overflow-hidden">
+  <header class="z-10 bg-white dark:bg-dark fixed top-0 left-0 w-[100%] px-[50px] xl:px-[20px] md:px-[10px] pt-[16px] md:pt-[10px] pb-[10px] border-b border-1 border-main dark:border-white text-xl lg:text-lg flex items-center justify-between overflow-hidden">
       <nav class="w-[90%] md:w-[auto] flex items-center gap-[5%] lg:gap-[20px] md:gap-[30px]">
         <div class="flex items-center justify-center gap-[16px] lg:gap-[10px] md:gap-[16px]">
           <img class="max-h-[68px] lg:max-h-[60px] md:max-h-[50px] rounded-[50%]" src="./assets/media/logo.jpg" alt="logo">
@@ -52,7 +52,7 @@
       </div>
   </header>
 
-  <aside class="z-3 hamburger-menu fixed top-0 right-0 bg-white dark:bg-dark h-full">
+  <aside class="z-20 hamburger-menu fixed top-0 right-0 bg-white dark:bg-dark h-full">
     <div class="w-full flex justify-end text-[24px] text-second"><font-awesome-icon class="menu-close" icon="fa-solid fa-xmark" /></div>
     <ul class="flex flex-col gap-[10px]">
       <li class="flex gap-2 text-main dark:text-white text-[20px]"><RouterLink to="/"><font-awesome-icon icon="fa-solid fa-home" /> <span>Anasayfa</span></RouterLink></li>
@@ -62,7 +62,7 @@
     </ul>
   </aside>
 
-  <main class="pt-[110px] lg:pt-[100px] md:pt-[80px] sm:pt-[75px]">
+  <main class="z-0 pt-[110px] lg:pt-[100px] md:pt-[80px] sm:pt-[75px]">
     <RouterView/>
   </main>
 </template>

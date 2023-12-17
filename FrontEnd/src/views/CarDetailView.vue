@@ -8,7 +8,6 @@ import { getCarImage, getBrandLogo, convert2Price } from '../scripts/common.js';
 const router = useRouter();
 const carId = ref(null);
 const carDetail = ref(null);
-const brand = ref(null);
 
 onMounted(() => {
   if (router.currentRoute.value.params.carId) {
@@ -17,15 +16,6 @@ onMounted(() => {
       `cars/detail/${carId.value}`,
       async (data) => {
         carDetail.value = data;
-        let brandId = data.brand;
-        fetchData(`brands/${brandId}`, 
-          async (data) => {
-            brand.value = data.logo
-          },
-          (error) => {
-            console.error('Bir hata oluştu:', error);
-          }
-        );
         await nextTick(); // Wait for the next DOM update cycle
         document.querySelectorAll('.image-option').forEach((element) => {
           element.addEventListener('click', (event) => {
@@ -66,7 +56,7 @@ onMounted(() => {
         <div class="w-[50%] pl-[10px] flex flex-col justify-around gap-[24px] lg:w-full lg:gap-[20px] xl:w-[40%]">
           <!-- title -->
           <div class="flex items-center gap-[20px] py-[10px]">
-            <img class="w-[80px]" :src="getBrandLogo(brand)">
+            <img class="w-[80px]" :src="getBrandLogo(carDetail.brand).logo" :alt="getBrandLogo(carDetail.brand).name" :title="getBrandLogo(carDetail.brand).name">
             <h1 class="text-[40px] text-main dark:text-white">{{ carDetail.title }}</h1>
           </div>
           <!-- description -->
