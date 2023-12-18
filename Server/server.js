@@ -44,5 +44,7 @@ app.get("/", (req, res) => {
 });
 const carsRoutes = require("./app/routes/cars-routes");
 const brandsRoutes = require("./app/routes/brands-routes");
+const companyRoutes = require("./app/routes/company-routes");
 app.use("/api/cars", carsRoutes);
 app.use("/api/brands", brandsRoutes);
+app.use("/api/company", companyRoutes);

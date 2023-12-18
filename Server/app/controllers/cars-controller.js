@@ -17,21 +17,6 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Find a single car with an id
-exports.findOne = (req, res) => {};
-
-// Create and Save a new car
-exports.create = (req, res) => {};
-
-// Update a car by the id in the request
-exports.update = (req, res) => {};
-
-// Delete a car with the specified id in the request
-exports.delete = (req, res) => {};
-
-// Delete all cars from the database.
-exports.deleteAll = (req, res) => {};
-
 // Get car detail with an id
 exports.getCarDetail = async (req, res) => {
   const carId = req.params.id;
@@ -49,3 +34,15 @@ exports.getCarDetail = async (req, res) => {
     res.status(500).send({ message: "Error retrieving car with id=" + id });
   }
 };
+
+// Create and Save a new car
+exports.create = (req, res) => {};
+
+// Update a car by the id in the request
+exports.update = (req, res) => {};
+
+// Delete a car with the specified id in the request
+exports.delete = (req, res) => {};
+
+// Delete all cars from the database.
+exports.deleteAll = (req, res) => {};
