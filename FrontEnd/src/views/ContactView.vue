@@ -1,4 +1,21 @@
 <script setup>
+  import { fetchData } from '../scripts/ajax.js'
+  import { ref, onMounted } from 'vue'
+
+  const contactData = ref({})
+
+  onMounted(() => {
+    fetchData('company/published',
+      function(data) {
+        data.map((item) => {
+          contactData.value = item.contact;
+        });
+      },
+      function(error) {
+        console.error('Bir hata oluştu:', error)
+      }
+    )
+  });
 </script>
 
 <template>
@@ -25,10 +42,11 @@
           <button class="w-[200px] p-[10px] bg-main text-white rounded-md">Gönder</button>
         </div>
       </div>
-      <div class="p-[40px] flex flex-col justify-center gap-[10px] text-[18px]">
-        <span>Telefon: 90+ 216 508 32 52</span>
-        <span>Fax: 90+ 216 508 55 37</span>
-        <span>Mail: rentEren@gmail.com</span>
+      <div v-if="contactData" class="p-[40px] flex flex-col justify-center gap-[10px] text-[18px]">
+        <span>Telefon: {{ contactData.tel }}</span>
+        <span>Fax: {{ contactData.fax }}</span>
+        <span>Mail: {{ contactData.mail }}</span>
+        <span>Adres: {{ contactData.address }}</span>
       </div>
     </div>
     <!-- img map ? -->
