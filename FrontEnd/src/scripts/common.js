@@ -24,6 +24,10 @@ function getBrandLogo (brandId) {
     : null;
 };
 
+function getCompanyImage(filename) {
+    return `http://localhost:3000/uploads/company/${filename}`;
+};
+
 function convert2Price(value) {
     var str = value.toLocaleString('en-US', {
         minimumFractionDigits: 2,
@@ -35,4 +39,4 @@ function convert2Price(value) {
     return str + "₺";
 }
 
-export { getCarImage, getBrandLogo, convert2Price };
+export { getCarImage, getBrandLogo, getCompanyImage, convert2Price };
