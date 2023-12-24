@@ -25,4 +25,13 @@ const postData = async (endpoint, data, onSuccess, onError) => {
   }
 };
 
-export { fetchData, postData };
+// PROMISE GET
+const fetchDataPromise = (endpoint) => {
+  return new Promise((resolve, reject) => {
+    apiClient.get(endpoint)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error));
+  });
+};
+
+export { fetchData, postData, fetchDataPromise };
