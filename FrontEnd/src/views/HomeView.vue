@@ -1,47 +1,107 @@
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { getBrandLogo } from '../scripts/common.js';
+
+const itemsToShow = ref(10);
+
+onMounted(() => {
+  const handleResize = () => {
+    const windowWidth = window.innerWidth;
+    if (windowWidth >= 1920) {
+      itemsToShow.value = 10;
+    } else if (windowWidth >= 1280) {
+      itemsToShow.value = 8;
+    } else if (windowWidth >= 800) {
+      itemsToShow.value = 6;
+    } else {
+      itemsToShow.value = 4;
+    }
+  };
+
+  window.addEventListener('resize', handleResize);
+  handleResize();
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize);
+  });
+});
+</script>
+
 <template>
-  <Carousel :autoplay="2000" :wrap-around="true" :items-to-show="1">
-    <Slide v-for="slide in slides" :key="slide.id">
-      <div class="flex items-center justify-center box-border w-full relative h-[450px] px-[40px]">
-        <img :src="slide.src" :alt="slide.alt" class="w-full h-full object-cover" />
-        <div class="w-[calc(100%-80px)] h-[25%] absolute bg-[rgba(0,0,0,0.75)] bottom-0 box-border px-[20px] pt-[10px] flex flex-col items-start">
-          <h2 class="text-[28px] text-second">{{ slide.title }}</h2>
-          <p class="text-[16px] text-white text-left">{{ slide.description }}</p>
-        </div>
-      </div>
-    </Slide>
-    <template #addons>
-      <Pagination />
-      <Navigation />
-    </template>
-  </Carousel>
+  <div class="w-full flex flex-col gap-[16px]">
+    <CustomCarousel :autoplay="2000" :wrap-around="true" :items-to-show="1" :slides="firstCarouselSlides">
+      <template v-slot:default>
+        <Slide v-for="slide in firstCarouselSlides" :key="slide.id" :slide="slide">
+          <div v-if="slide" class="flex items-center justify-center box-border w-full relative h-[450px] sm:h-[200px] px-[40px]">
+            <img :src="slide.src" :alt="slide.alt" class="w-full h-full object-cover" />
+            <div class="w-[calc(100%-80px)] h-[25%] absolute bg-[rgba(0,0,0,0.75)] bottom-0 box-border px-[20px] pt-[10px] flex flex-col items-start">
+              <h2 class="text-[28px] sm:text-[18px] text-second">{{ slide.title }}</h2>
+              <p class="text-[16px] text-white text-left sm:hidden">{{ slide.description }}</p>
+            </div>
+          </div>
+        </Slide>
+      </template>
+      <template #addons>
+        <Pagination />
+        <Navigation />
+      </template>
+    </CustomCarousel>
+
+    <CustomCarousel :wrap-around="true" :items-to-show="itemsToShow" :slides="secondCarouselSlides" class="px-[50px]">
+      <template v-slot:default>
+        <Slide v-for="slide in secondCarouselSlides" :key="slide.id" :slide="slide">
+          <div v-if="slide" class="flex items-center justify-center w-[120px] h-[80px] p-[10px] sm:w-[60px] sm:h-[60px] dark:bg-[#efefef] rounded-[10px] border-[#ddd] border-[1px] cursor-pointer">
+            <img :src="getBrandLogo(slide.brandId).logo" :alt="slide.name" class="w-full h-full object-contain" />
+          </div>
+        </Slide>
+      </template>
+      <template #addons>
+        <Navigation />
+      </template>
+    </CustomCarousel>
+  </div>
 </template>
 
 <script>
-  import { defineComponent } from 'vue';
-  import 'vue3-carousel/dist/carousel.css';
-  import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
-  import { fetchDataPromise } from '../scripts/ajax.js'
+import { defineComponent } from 'vue';
+import 'vue3-carousel/dist/carousel.css';
+import { Carousel as CustomCarousel, Slide, Pagination, Navigation } from 'vue3-carousel';
+import { fetchDataPromise } from '../scripts/ajax.js';
 
-  export default defineComponent({
-    name: 'DynamicSlides',
-    components: {
-      Carousel,
-      Slide,
-      Pagination,
-      Navigation,
-    },
-    data() {
-      return {
-        slides: [],
-      };
-    },
-    async created() {
+export default defineComponent({
+  data() {
+    return {
+      firstCarouselSlides: [],
+      secondCarouselSlides: [],
+    };
+  },
+  created() {
+    this.fetchFirstCarouselData();
+    this.fetchSecondCarouselData();
+  },
+  methods: {
+    async fetchFirstCarouselData() {
       try {
-        const banners = await fetchDataPromise('home/banners');
-        this.slides = banners;
+        const data = await fetchDataPromise('home/banners');
+        this.firstCarouselSlides = data;
       } catch (error) {
-        console.error('API isteği başarısız oldu:', error);
+        console.error('First Carousel data fetch error:', error);
       }
     },
-  });
+    async fetchSecondCarouselData() {
+      try {
+        const data = await fetchDataPromise('brands/published');
+        this.secondCarouselSlides = data;
+      } catch (error) {
+        console.error('Second Carousel data fetch error:', error);
+      }
+    },
+  },
+  components: {
+    CustomCarousel,
+    Slide,
+    Pagination,
+    Navigation,
+  },
+});
 </script>

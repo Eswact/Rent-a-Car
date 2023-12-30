@@ -6,6 +6,7 @@ import { getCarImage, getBrandLogo } from '../scripts/common.js';
 
 const router = useRouter();
 const cars = ref([]);
+const brands = ref([]);
 const originalCars = ref([]);
 const searchTerm = ref('');
 const selectedBrand = ref(0);
@@ -19,6 +20,15 @@ const fetchCars = async () => {
     function(data) {
       cars.value = data;
       originalCars.value = data;
+    },
+    function(error) {
+      console.error('Bir hata oluştu:', error);
+    }
+  );
+  fetchData('brands/published',
+    function(data) {
+      brands.value = data;
+      console.log(data)
     },
     function(error) {
       console.error('Bir hata oluştu:', error);
@@ -55,8 +65,7 @@ function applyFilters() {
     <input v-model="searchTerm" id="carNameFilter" type="search" placeholder="Aradığınız Araba" class="w-[160px] text-center text-[17px] text-[#333] dark:text-[#eee] bg-transparent placeholder-[#333] dark:placeholder-[#eee] focus:text-left focus:placeholder-transparent dark:focus:placeholder-transparent dark:border-[#ddd] focus:outline-none focus:border-b-[1px] border-[#555]" />
     <select v-model="selectedBrand" name="brands" id="brandFilter" class="w-[160px] text-[17px] text-[#333] dark:text-[#eee] bg-transparent">
       <option value=0>Marka Seçimi</option>
-      <option value=1>Skoda</option>
-      <option value=2>Volkswagen</option>
+      <option v-for="brand in brands" :key="brand.brandId" :value="brand.brandId">{{ brand.name }}</option>
     </select>
   </div>
   <hr class="mt-[10px] mb-[20px]">
@@ -67,7 +76,7 @@ function applyFilters() {
       <img :src="getCarImage(car.image)" :alt="car.title">
       <div class="flex justify-between px-[10px] pt-[8px] border-t-[1px] border-t-main">
         <span class="text-[20px] text-main">{{ car.title }}</span>
-        <button @click="getDetailsPage(car.carId)" class="border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Hemen Kirala</button>
+        <button @click="getDetailsPage(car.carId)" class="text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
       </div>
     </div>
   </div>
