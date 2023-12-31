@@ -61,9 +61,7 @@ onMounted(() => {
 });
 
 function applyFilters() {
-  console.log('deneme1')
   cars.value = originalCars.value.filter(car => {
-    console.log('deneme2')
     const brandFilter = selectedBrand.value == 0 || car.brand == selectedBrand.value;
     const searchFilter = searchTerm.value === '' || car.title.toLowerCase().includes(searchTerm.value.toLowerCase());
     return brandFilter && searchFilter;
@@ -82,10 +80,10 @@ function applyFilters() {
   </div>
   <hr class="mt-[10px] mb-[20px]">
   <!-- cars -->
-  <div class="flex flex-wrap gap-[20px] items-center md:justify-center">
-    <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] border-main w-[340px] p-[20px] flex flex-col gap-[8px] bg-white shadow-md shadow-main-shadow relative ">
+  <div class="flex flex-wrap gap-[20px] items-center xl:justify-center">
+    <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] w-[calc(25%-16px)] border-main 2xl:min-w-[340px] 2xl:w-[32%] xl:w-[340px] p-[20px] flex flex-col gap-[8px] bg-white shadow-md shadow-main-shadow relative ">
       <img v-if="getBrandLogo(car.brand)" class="absolute top-[12px] left-[12px] w-[46px]" :src="getBrandLogo(car.brand).logo" :alt="getBrandLogo(car.brand).name" :title="getBrandLogo(car.brand).name">
-      <img :src="getCarImage(car.image)" :alt="car.title">
+      <img class="h-[160px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
       <div class="flex justify-between px-[10px] pt-[8px] border-t-[1px] border-t-main">
         <span class="text-[20px] text-main">{{ car.title }}</span>
         <button @click="getDetailsPage(car.carId)" class="text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
