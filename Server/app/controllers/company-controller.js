@@ -4,7 +4,6 @@ const company = db.company;
 // Get all company data.
 exports.getData = async (req, res) => {
     try {
-      console.log(company);
       const companyData = await company.find();
       res.json(companyData);
     } catch (error) {

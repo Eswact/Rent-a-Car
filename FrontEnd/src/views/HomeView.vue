@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { getBrandLogo } from '../scripts/common.js';
+import { getBrandLogo, getBannerImage } from '../scripts/common.js';
 
 const itemsToShow = ref(10);
 
@@ -25,6 +25,11 @@ onMounted(() => {
     window.removeEventListener('resize', handleResize);
   });
 });
+
+function directCarsWithBrandId(brandId) {
+  console.log('directCarsWithBrandId', brandId);
+  window.location.href = `/cars?brandId=${brandId}`;
+}
 </script>
 
 <template>
@@ -32,9 +37,9 @@ onMounted(() => {
     <CustomCarousel :autoplay="2000" :wrap-around="true" :items-to-show="1" :slides="firstCarouselSlides">
       <template v-slot:default>
         <Slide v-for="slide in firstCarouselSlides" :key="slide.id" :slide="slide">
-          <div v-if="slide" class="flex items-center justify-center box-border w-full relative h-[450px] sm:h-[200px] px-[40px]">
-            <img :src="slide.src" :alt="slide.alt" class="w-full h-full object-cover" />
-            <div class="w-[calc(100%-80px)] h-[25%] absolute bg-[rgba(0,0,0,0.75)] bottom-0 box-border px-[20px] pt-[10px] flex flex-col items-start">
+          <div v-if="slide" class="flex items-center justify-center box-border w-full relative h-[450px] sm:h-[200px] px-[40px] sm:px-0">
+            <img :src="getBannerImage(slide.src)" :alt="slide.alt" class="w-full h-full object-cover rounded-[6px]" />
+            <div class="w-[calc(100%-80px)] sm:w-full h-[25%] absolute bg-[rgba(0,0,0,0.75)] bottom-0 box-border px-[20px] pt-[10px] flex flex-col items-start rounded-[6px]">
               <h2 class="text-[28px] sm:text-[18px] text-second">{{ slide.title }}</h2>
               <p class="text-[16px] text-white text-left sm:hidden">{{ slide.description }}</p>
             </div>
@@ -50,7 +55,7 @@ onMounted(() => {
     <CustomCarousel :wrap-around="true" :items-to-show="itemsToShow" :slides="secondCarouselSlides" class="px-[50px]">
       <template v-slot:default>
         <Slide v-for="slide in secondCarouselSlides" :key="slide.id" :slide="slide">
-          <div v-if="slide" class="flex items-center justify-center w-[120px] h-[80px] p-[10px] sm:w-[60px] sm:h-[60px] dark:bg-[#efefef] rounded-[10px] border-[#ddd] border-[1px] cursor-pointer">
+          <div v-if="slide" @click="directCarsWithBrandId(slide.brandId)"  class="flex items-center justify-center w-[120px] h-[80px] p-[10px] sm:w-[60px] sm:h-[60px] dark:bg-[#efefef] rounded-[10px] border-[#ddd] border-[1px] cursor-pointer">
             <img :src="getBrandLogo(slide.brandId).logo" :alt="slide.name" class="w-full h-full object-contain" />
           </div>
         </Slide>

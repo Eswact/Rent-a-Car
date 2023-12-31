@@ -16,7 +16,7 @@ const getDetailsPage = (carId) => {
 };
 
 const fetchCars = async () => {
-  fetchData('cars/published',
+  await fetchData('cars/published',
     function(data) {
       cars.value = data;
       originalCars.value = data;
@@ -25,7 +25,7 @@ const fetchCars = async () => {
       console.error('Bir hata oluştu:', error);
     }
   );
-  fetchData('brands/published',
+  await fetchData('brands/published',
     function(data) {
       brands.value = data;
       console.log(data)
@@ -37,21 +37,33 @@ const fetchCars = async () => {
 };
 
 onMounted(() => {
-  fetchCars();
+  // brandId parametresini kontrol et
+  const brandIdFromQuery = router.currentRoute.value.query.brandId;
+  if (brandIdFromQuery) {
+    selectedBrand.value = parseInt(brandIdFromQuery);
+    console.log(selectedBrand.value)  
+    document.getElementById('brandFilter').value = brandIdFromQuery;
+  }
 
-  // car-search
-  watch(searchTerm, () => {
-    applyFilters();
-  });
+  fetchCars().then(() => {
+    // car-search
+    watch(searchTerm, () => {
+      applyFilters();
+    });
 
-  // brand-select
-  watch(selectedBrand, () => {
+    // brand-select
+    watch(selectedBrand, () => {
+      applyFilters();
+    });
+
     applyFilters();
   });
 });
 
 function applyFilters() {
+  console.log('deneme1')
   cars.value = originalCars.value.filter(car => {
+    console.log('deneme2')
     const brandFilter = selectedBrand.value == 0 || car.brand == selectedBrand.value;
     const searchFilter = searchTerm.value === '' || car.title.toLowerCase().includes(searchTerm.value.toLowerCase());
     return brandFilter && searchFilter;
@@ -71,7 +83,7 @@ function applyFilters() {
   <hr class="mt-[10px] mb-[20px]">
   <!-- cars -->
   <div class="flex flex-wrap gap-[20px] items-center md:justify-center">
-    <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] border-second w-[340px] p-[20px] flex flex-col gap-[8px] bg-white shadow-md shadow-second-shadow relative ">
+    <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] border-main w-[340px] p-[20px] flex flex-col gap-[8px] bg-white shadow-md shadow-main-shadow relative ">
       <img v-if="getBrandLogo(car.brand)" class="absolute top-[12px] left-[12px] w-[46px]" :src="getBrandLogo(car.brand).logo" :alt="getBrandLogo(car.brand).name" :title="getBrandLogo(car.brand).name">
       <img :src="getCarImage(car.image)" :alt="car.title">
       <div class="flex justify-between px-[10px] pt-[8px] border-t-[1px] border-t-main">
