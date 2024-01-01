@@ -1,5 +1,17 @@
 import { fetchData } from '../scripts/ajax.js'
 
+function setlocalstorage(tmpname, tmpvalue) {
+    window.localStorage.setItem(tmpname, encodeURIComponent(tmpvalue));
+}
+function getlocalstorage(tmpname) {
+    var tmp_dbvalue = "";
+    tmp_dbvalue = decodeURIComponent(window.localStorage.getItem(tmpname));
+    if (tmp_dbvalue == "null") {
+        tmp_dbvalue = "";
+    }
+    return tmp_dbvalue;
+}
+
 var brandList;
 fetchData(`brands/published`, 
     async (data) => {
@@ -43,4 +55,4 @@ function convert2Price(value) {
     return str + "₺";
 }
 
-export { getCarImage, getBrandLogo, getCompanyImage, getBannerImage, convert2Price };
+export { setlocalstorage, getlocalstorage, getCarImage, getBrandLogo, getCompanyImage, getBannerImage, convert2Price };

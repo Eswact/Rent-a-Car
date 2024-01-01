@@ -1,20 +1,33 @@
 <script setup>
   import { RouterLink, RouterView } from 'vue-router'
   import { onMounted } from 'vue'
+  import { setlocalstorage, getlocalstorage } from './scripts/common';
 
   onMounted(() => {
     // dark-mode
     const darkModeToggle = document.getElementById('dark-mode-slider');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    if (prefersDarkScheme.matches) {
-      document.documentElement.classList.add('dark');
-      darkModeToggle.checked = true;
+    if (getlocalstorage('dark-mode') != '') {
+      if (getlocalstorage('dark-mode') == 'true') {
+        document.documentElement.classList.add('dark');
+        darkModeToggle.checked = true;
+      } else {
+        document.documentElement.classList.remove('dark');
+        darkModeToggle.checked = false;
+      }
+    } else {
+      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+      if (prefersDarkScheme.matches) {
+        document.documentElement.classList.add('dark');
+        darkModeToggle.checked = true;
+      }
     }
     darkModeToggle.addEventListener('change', () => {
       if (darkModeToggle.checked) {
         document.documentElement.classList.add('dark');
+        setlocalstorage('dark-mode', 'true');
       } else {
         document.documentElement.classList.remove('dark');
+        setlocalstorage('dark-mode', 'false');
       }
     });
     // hamburger-menu
