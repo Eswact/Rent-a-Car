@@ -1,5 +1,5 @@
+import { getlocalstorage } from '../scripts/common.js';
 export function isLoggedIn() {
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // return user !== null && user.accessToken !== null;
-    return false;
+    const user = getlocalstorage('user');
+    return user !== null;
 }

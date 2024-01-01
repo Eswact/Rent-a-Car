@@ -6,7 +6,12 @@ exports.login = async (req, res) => {
     try {
       console.log(req.body);  
       const currentUser = await users.findOne({ username: req.body.username, password: req.body.password });
-      res.json(currentUser);
+      if (currentUser != null) {
+        res.json(currentUser);
+      }
+      else {
+        return res.status(404).send({ message: "User Not found." });
+      }
     } catch (error) {
       res.status(500).send({
         message: error.message || "Some error occurred while retrieving brands."
