@@ -40,8 +40,15 @@ exports.create = async (req, res) => {
   let allCars = await cars.find();
   req.body.carId = allCars.length + 1;
   try {
-    const newCar = new cars(req.body);
+    const newCar = new cars({
+      carId: req.body.carId,
+      title: req.body.title,
+      brand: req.body.brand,
+      image: req.body.images[0]
+    });
+    const newCarDetail = new carDetails(req.body);
     const savedCar = await newCar.save();
+    const savedCarDetail = await newCarDetail.save(); 
     res.status(201).json(savedCar);
   } catch (error) {
     res.status(500).send({
@@ -57,8 +64,9 @@ exports.update = (req, res) => {};
 exports.delete = async (req, res) => {
   const id = req.params.id;
   try {
-    const result = await cars.deleteOne({ carId: id });
-    if (result.deletedCount === 0) {
+    const carDeleteResult = await cars.deleteOne({ carId: id });
+    const carDetailsDeleteResult = await carDetails.deleteOne({ carId: id });
+    if (carDeleteResult.deletedCount === 0 || carDetailsDeleteResult.deletedCount === 0) {
       res.status(404).send({ message: "Not found car with id " + id });
     } else {
       res.status(200).send({ message: "Car deleted successfully!" });
