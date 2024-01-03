@@ -30,3 +30,33 @@ exports.findOne = async (req, res) => {
     res.status(500).send({ message: "Error retrieving brand with id=" + id });
   }
 };
+
+// Create and Save a new brand
+exports.create = async (req, res) => {
+  let allBrands = await brands.find();
+  req.body.brandId = allBrands.length + 1;
+  try {
+    const newBrand = new brands(req.body);
+    const savedBrand = await newBrand.save();
+    res.status(201).json(savedBrand);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Some error occurred while creating the brand."
+    });
+  }
+};
+
+// Delete a brand with the specified id in the request
+exports.delete = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const brandDeleteResult = await brands.deleteOne({ brandId: id });
+    if (brandDeleteResult.deletedCount === 0) {
+      res.status(404).send({ message: "Not found brand with id " + id });
+    } else {
+      res.status(200).send({ message: "Brand deleted successfully!" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: "Could not delete brand with id=" + id });
+  }
+};
