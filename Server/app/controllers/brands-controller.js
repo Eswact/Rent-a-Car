@@ -33,8 +33,8 @@ exports.findOne = async (req, res) => {
 
 // Create and Save a new brand
 exports.create = async (req, res) => {
-  let allBrands = await brands.find();
-  req.body.brandId = allBrands.length + 1;
+  const latestBrand = await brands.findOne().sort({ brandId: -1 });
+  req.body.brandId = latestBrand ? latestBrand.brandId + 1 : 1;
   try {
     const newBrand = new brands(req.body);
     const savedBrand = await newBrand.save();

@@ -37,8 +37,8 @@ exports.getCarDetail = async (req, res) => {
 
 // Create and Save a new car
 exports.create = async (req, res) => {
-  let allCars = await cars.find();
-  req.body.carId = allCars.length + 1;
+  const latestCar = await cars.findOne().sort({ carId: -1 });
+  req.body.carId = latestCar ? latestCar.carId + 1 : 1
   try {
     const newCar = new cars({
       carId: req.body.carId,
