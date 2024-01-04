@@ -36,7 +36,7 @@ function directCarsWithBrandId(brandId) {
   <div class="w-full flex flex-col gap-[16px]">
     <CustomCarousel :autoplay="2000" :wrap-around="true" :items-to-show="1" :slides="firstCarouselSlides">
       <template v-slot:default>
-        <Slide v-for="slide in firstCarouselSlides" :key="slide.id" :slide="slide">
+        <Slide v-for="slide in firstCarouselSlides" :key="slide.bannerId" :slide="slide">
           <div v-if="slide" class="flex items-center justify-center box-border w-full relative h-[420px] sm:h-[200px] px-[40px] sm:px-0 cursor-grab active:cursor-grabbing">
             <img :src="getBannerImage(slide.src)" :alt="slide.alt" class="w-full h-full object-cover rounded-[6px]" />
             <div class="w-[calc(100%-80px)] sm:w-full h-[30%] absolute bg-[rgba(0,0,0,0.75)] bottom-0 box-border px-[20px] pt-[10px] flex flex-col items-start rounded-[6px]">
