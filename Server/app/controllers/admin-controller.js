@@ -18,3 +18,7 @@ exports.login = async (req, res) => {
       });
     }
   };
+
+exports.AddBannerImage = async (req, res) => {
+    var newImg = req.body.img;
+}

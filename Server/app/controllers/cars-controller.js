@@ -4,12 +4,9 @@ const carDetails = db.carDetails;
 
 // Get all cars from the database.
 exports.findAll = async (req, res) => {
-  // res.setHeader('Access-Control-Allow-Origin', '*');
   try {
     const carsData = await cars.find();
     res.json(carsData);
-    // console.log('Request Headers:', req.headers);
-    // console.log('Bağlantı başarılı');
   } catch (error) {
     res.status(500).send({
       message: error.message || "Some error occurred while retrieving cars."
