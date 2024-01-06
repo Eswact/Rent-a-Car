@@ -34,4 +34,18 @@ const fetchDataPromise = (endpoint) => {
   });
 };
 
-export { fetchData, postData, fetchDataPromise };
+// POST FORM DATA
+const postFormData = async (endpoint, formData, onSuccess, onError) => {
+  try {
+    const response = await apiClient.post(endpoint, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    onSuccess(response.data);
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export { fetchData, postData, fetchDataPromise, postFormData };

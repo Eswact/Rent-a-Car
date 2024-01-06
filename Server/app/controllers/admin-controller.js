@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const db = require("../models");
 const users = db.users;
 
@@ -19,6 +21,18 @@ exports.login = async (req, res) => {
     }
   };
 
-exports.AddBannerImage = async (req, res) => {
-    var newImg = req.body.img;
-}
+  exports.AddBannerImage = async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'Dosya yüklenemedi.' });
+      }
+      const imgData = req.file.buffer.toString('base64');
+      const filePath = path.join(__dirname, '../../uploads/banners', req.file.originalname);
+      console.log(filePath);
+      fs.writeFileSync(filePath, imgData, 'base64');
+      res.status(200).json({ message: 'Resim başarıyla kaydedildi.' });
+    } catch (error) {
+      console.error('Resim kaydetme hatası:', error);
+      res.status(500).json({ error: 'Bir hata oluştu, resim kaydedilemedi.' });
+    }
+  }

@@ -1,6 +1,6 @@
 <script setup>
     import { ref, onMounted } from 'vue';
-    import { fetchData, postData } from '../scripts/ajax.js';
+    import { fetchData, postData, postFormData } from '../scripts/ajax.js';
     import { getBannerImage } from '../scripts/common.js';
 
     const banners = ref([]);
@@ -23,6 +23,27 @@
         event.preventDefault();
         const file = event.dataTransfer.files[0];
         handleImage(file);
+    };
+
+    const saveNewBanner = () => {
+        const file = document.getElementById('fileInput').files[0];
+        postFormData('admin/addBannerImage', {
+            file: file
+        }, function (data) {
+            console.log(data);
+        }, function (error) {
+            console.error('Bir hata oluştu:', error);
+        });
+        postData('home/banners/create', {
+            src: file.name,
+            alt: file.name,
+            title: document.getElementById('bannerHeader').value,
+            description: document.getElementById('bannerDescription').value
+        }, function (data) {
+            console.log(data);
+        }, function (error) {
+            console.error('Bir hata oluştu:', error);
+        });
     };
 
     const handleImage = (file) => {
@@ -79,9 +100,9 @@
                 <h1 class="text-[20px] text-main font-[600]">Banner Ekle</h1>
                 <button class="absolute top-[-11px] right-[-13px] text-second" @click="closeBannerModal"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
             </div>
-            <form id="modalContent" class="flex flex-col gap-[10px] p-[10px]">
+            <form id="modalContent" class="flex flex-col gap-[10px] p-[10px]" enctype="multipart/form-data" method="POST">
                 <div class="relative">
-                    <input type="file" id="fileInput" ref="fileInput" @change="handleFileChange" class="hidden" accept=".jpg, .jpeg, .png, .webp" required>
+                    <input type="file" id="fileInput" ref="fileInput" @change="handleFileChange" class="hidden" accept=".jpg, .jpeg, .png, .webp">
                     <div class="w-full h-[240px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                         <div v-if="!selectedImage" class="text-center">Resim seçin veya sürükleyip bırakın</div>
                         <div v-else class="w-full h-full rounded-[6px] overflow-hidden">
@@ -89,9 +110,9 @@
                         </div>
                     </div>
                 </div>
-                <input type="text" id="bannerHeader" placeholder="Başlık giriniz..." class="border-[1px] rounded-[6px] px-[12px] py-[4px]" required>
+                <input type="text" id="bannerHeader" placeholder="Başlık giriniz..." class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
                 <textarea name="description" id="bannerDescription" placeholder="Açıklama giriniz..." class="border-[1px] rounded-[6px] px-[12px] py-[4px]"></textarea>
-                <div class="flex justify-center items-center"><button class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
+                <div class="flex justify-center items-center"><button type="button" @click="saveNewBanner" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
             </form>
         </div>
     </div>
