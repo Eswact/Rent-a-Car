@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { getBrandLogo, getBannerImage } from '../scripts/common.js';
+import { getBrand, getBannerImage } from '../scripts/common.js';
 
 const itemsToShow = ref(10);
 
@@ -56,7 +56,7 @@ function directCarsWithBrandId(brandId) {
       <template v-slot:default>
         <Slide v-for="slide in secondCarouselSlides" :key="slide.id" :slide="slide">
           <div v-if="slide" @click="directCarsWithBrandId(slide.brandId)"  class="flex items-center justify-center w-[120px] h-[80px] p-[10px] sm:w-[60px] sm:h-[60px] dark:bg-[#efefef] rounded-[10px] border-[#ddd] border-[1px] cursor-pointer">
-            <img :src="getBrandLogo(slide.brandId).logo" :alt="slide.name" class="w-full h-full object-contain" />
+            <img :src="getBrand(slide.brandId).logo" :alt="slide.name" class="w-full h-full object-contain" />
           </div>
         </Slide>
       </template>

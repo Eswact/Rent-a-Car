@@ -2,7 +2,7 @@
 import { ref, onMounted, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { fetchData } from '../scripts/ajax.js';
-import { getCarImage, getBrandLogo, convert2Price } from '../scripts/common.js';
+import { getCarImage, getBrand, convert2Price } from '../scripts/common.js';
 
 
 const router = useRouter();
@@ -56,7 +56,7 @@ onMounted(() => {
         <div class="w-[50%] pl-[10px] flex flex-col justify-around gap-[24px] lg:w-full lg:gap-[20px] xl:w-[40%]">
           <!-- title -->
           <div class="flex items-center gap-[20px] py-[10px]">
-            <img class="w-[80px]" :src="getBrandLogo(carDetail.brand).logo" :alt="getBrandLogo(carDetail.brand).name" :title="getBrandLogo(carDetail.brand).name">
+            <img class="w-[80px]" :src="getBrand(carDetail.brand).logo" :alt="getBrand(carDetail.brand).name" :title="getBrand(carDetail.brand).name">
             <h1 class="text-[40px] text-main dark:text-white">{{ carDetail.title }}</h1>
           </div>
           <!-- description -->

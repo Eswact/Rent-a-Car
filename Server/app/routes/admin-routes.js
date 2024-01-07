@@ -9,5 +9,6 @@ const admin = require("../controllers/admin-controller");
 // router
 router.post("/login", admin.login);
 router.post("/addBannerImage", upload.single('file'), admin.AddBannerImage);
+router.post("/addBrandImage", upload.single('file'), admin.AddBrandImage);
 
 module.exports = router;

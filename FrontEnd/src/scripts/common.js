@@ -26,7 +26,7 @@ function getCarImage(filename) {
     return `http://localhost:3000/uploads/cars/${filename}`;
 };
 
-function getBrandLogo (brandId) {
+function getBrand (brandId) {
     const brand = brandList.find(x => x.brandId === brandId);
     return brand
     ? {
@@ -35,6 +35,10 @@ function getBrandLogo (brandId) {
       }
     : null;
 };
+
+function getBrandImage(filename) {
+    return `http://localhost:3000/uploads/brands/${filename}`;
+}
 
 function getCompanyImage(filename) {
     return `http://localhost:3000/uploads/company/${filename}`;
@@ -55,4 +59,4 @@ function convert2Price(value) {
     return str + "₺";
 }
 
-export { setlocalstorage, getlocalstorage, getCarImage, getBrandLogo, getCompanyImage, getBannerImage, convert2Price };
+export { setlocalstorage, getlocalstorage, getCarImage, getBrand, getBrandImage, getCompanyImage, getBannerImage, convert2Price };
