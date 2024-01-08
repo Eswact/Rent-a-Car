@@ -178,6 +178,18 @@
             }
         );
     };
+    const saveNewCar = () => {
+        const files = document.getElementById('fileInputCar').files;
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files', files[i]);
+        }
+        postFormData('admin/addCarImage', formData, function () {
+            console.log('Başarılı');
+        }, function (error) {
+            console.error('Bir hata oluştu:', error);
+        });
+    };
     const openCarModal = () => {
         document.getElementById('carModal').classList.add('open');
     };
@@ -337,20 +349,26 @@
                 </select>
                 <div class="w-full flex items-center gap-[2%]">
                     <input type="text" placeholder="Model" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input type="text" placeholder="Sene" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input type="number" placeholder="Sene" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
                 <textarea class="border-[1px] px-[12px] py-[6px] rounded-[6px]" placeholder="Açıklama"></textarea>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input type="text" placeholder="Kişi Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input type="text" placeholder="Bagaj Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input type="number" placeholder="Kişi Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input type="number" placeholder="Bagaj Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input type="text" placeholder="Kilometre" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input type="text" placeholder="Manual / Otomatik" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input type="number" placeholder="Kilometre" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <select class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                        <option value="0" selected>Yakıt Seçimi</option>
+                        <option value="1">Benzin</option>
+                        <option value="2">Dizel</option>
+                        <option value="3">LPG</option>
+                        <option value="4">Elektrik</option>
+                    </select>
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input type="text" placeholder="Yaş Sınırı" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input type="text" placeholder="Günlük Ücret" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input type="number" placeholder="Yaş Sınırı" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input type="number" placeholder="Günlük Ücret" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
                 <div class="flex justify-center items-center"><button type="button" @click="saveNewCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
             </form>
