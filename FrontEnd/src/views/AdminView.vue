@@ -181,13 +181,49 @@
     const saveNewCar = () => {
         const files = document.getElementById('fileInputCar').files;
         const formData = new FormData();
+        let images = [];
         for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]);
+            images.push(files[i].name);
         }
+        console.log(images);
         postFormData('admin/addCarImage', formData, function () {
             console.log('Başarılı');
         }, function (error) {
             console.error('Bir hata oluştu:', error);
+        });
+        postData('cars/create', {
+            images: images,
+            title: `${document.getElementById('brandSelect').options[document.querySelector('#brandSelect').selectedIndex].dataset.name} ${document.getElementById('carModel').value}`,
+            brand: document.getElementById('brandSelect').value,
+            model: {
+                name: document.getElementById('carModel').value,
+                year: document.getElementById('carYear').value
+            },
+            description: document.getElementById('carDescription').value,
+            people: document.getElementById('carPeople').value,
+            capacity: document.getElementById('carCapacity').value,
+            gasoline: document.getElementById('carGasoline').value,
+            kilometer: document.getElementById('carKilometer').value,
+            age: document.getElementById('carAge').value,
+            payment: 1,
+            dailyPrice: document.getElementById('carDailyPrice').value
+        }, function () {
+            console.log('Başarılı');
+        }, function (error) {
+            console.error('Bir hata oluştu:', error);
+        }).then(() => {
+            getCars();
+        });
+        closeCarModal();
+    };
+    const deleteCar = (carId) => {
+        postData(`cars/delete/${carId}`, {}, function () {
+            console.log('Başarılı');
+        }, function (error) {
+            console.error('Bir hata oluştu:', error);
+        }).then(() => {
+            getCars();
         });
     };
     const openCarModal = () => {
@@ -343,22 +379,22 @@
                         <img v-for="image in selectedImages" :key="image" :src="image" alt="Selected Images" class="w-[50%] h-[50%] object-cover p-[2px]">
                     </div>
                 </div>
-                <select name="brands" id="brandFilter" class="w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
+                <select name="brands" id="brandSelect" class="w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
                     <option value=0>Marka Seçimi</option>
-                    <option v-for="brand in brands" :key="brand.brandId" :value="brand.brandId">{{ brand.name }}</option>
+                    <option v-for="brand in brands" :key="brand.brandId" :value="brand.brandId" :data-name="brand.name">{{ brand.name }}</option>
                 </select>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input type="text" placeholder="Model" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input type="number" placeholder="Sene" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carModel" type="text" placeholder="Model" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carYear" type="number" placeholder="Sene" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
-                <textarea class="border-[1px] px-[12px] py-[6px] rounded-[6px]" placeholder="Açıklama"></textarea>
+                <textarea id="carDescription" class="border-[1px] px-[12px] py-[6px] rounded-[6px]" placeholder="Açıklama"></textarea>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input type="number" placeholder="Kişi Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input type="number" placeholder="Bagaj Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carPeople" type="number" placeholder="Kişi Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carCapacity" type="number" placeholder="Bagaj Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input type="number" placeholder="Kilometre" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <select class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carKilometer" type="number" placeholder="Kilometre" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <select id="carGasoline" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                         <option value="0" selected>Yakıt Seçimi</option>
                         <option value="1">Benzin</option>
                         <option value="2">Dizel</option>
@@ -367,8 +403,8 @@
                     </select>
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input type="number" placeholder="Yaş Sınırı" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input type="number" placeholder="Günlük Ücret" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carAge" type="number" placeholder="Yaş Sınırı" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carDailyPrice" type="number" placeholder="Günlük Ücret" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
                 <div class="flex justify-center items-center"><button type="button" @click="saveNewCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
             </form>
