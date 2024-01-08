@@ -86,7 +86,7 @@ function applyFilters() {
       <img class="h-[160px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
       <div class="flex justify-between px-[10px] pt-[8px] border-t-[1px] border-t-main">
         <span class="text-[20px] text-main">{{ car.title }}</span>
-        <button @click="getDetailsPage(car.carId)" class="text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
+        <button @click="getDetailsPage(car.carId)" class="gelatine text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
       </div>
     </div>
   </div>

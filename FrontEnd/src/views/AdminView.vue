@@ -203,7 +203,7 @@
             <div class="flex items-center justify-center gap-[10px] flex-wrap p-[10px]">
                 <div v-for="banner in banners" :key="banner.bannerId" class="itemCard w-[360px] h-[120px] rounded-[10px] overflow-hidden cursor-pointer relative">
                     <img :src="getBannerImage(banner.src)" :alt="banner.title" class="w-full h-full object-cover">
-                    <button @click="deleteBanner(banner.bannerId)" class="deleteItem absolute top-[4px] right-[4px] py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
+                    <button @click="deleteBanner(banner.bannerId)" class="gelatine deleteItem absolute top-[4px] right-[4px] py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
                 </div>
                 <div @click="openBannerModal" class="w-[360px] h-[120px] rounded-[10px] overflow-hidden border-[1px] border-main bg-main-shadow flex justify-center items-center cursor-pointer">
                     <div class="border-main border-[2px] rounded-[50%] text-main bg-white w-[50px] h-[50px] shadow-sm shadow-main flex justify-center items-center">
@@ -220,7 +220,7 @@
             <div class="flex items-center justify-center gap-[20px] flex-wrap p-[10px]">
                 <div v-for="brand in brands" :key="brand.brandId" class="itemCard w-[100px] h-[100px] p-[10px] rounded-[10px] overflow-hidden cursor-pointer relative border-main border-[1px]">
                     <img :src="getBrandImage(brand.logo)" :alt="brand.name" class="w-full h-full object-cover">
-                    <button @click="deleteBrand(brand.brandId)" class="deleteItem absolute top-[4px] right-[4px] py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
+                    <button @click="deleteBrand(brand.brandId)" class="gelatine deleteItem absolute top-[4px] right-[4px] py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
                 </div>
                 <div @click="openBrandModal" class="w-[100px] h-[100px] rounded-[10px] overflow-hidden border-[1px] border-main bg-main-shadow flex justify-center items-center cursor-pointer">
                     <div class="border-main border-[2px] rounded-[50%] text-main bg-white w-[50px] h-[50px] shadow-sm shadow-main flex justify-center items-center">
@@ -236,7 +236,7 @@
             <hr class="mb-[10px]">
             <div class="flex items-center justify-center gap-[10px] flex-wrap p-[10px]">
                 <div v-for="car in cars" :key="car.id" class="itemCard car-card rounded-[12px] border-[1px] border-main w-[228px] p-[10px] flex flex-col gap-[8px] bg-white shadow-md shadow-main-shadow relative cursor-pointer">
-                    <button @click="deleteCar(car.carId)" class="deleteItem absolute top-[4px] right-[4px] py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
+                    <button @click="deleteCar(car.carId)" class="gelatine deleteItem absolute top-[4px] right-[4px] py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
                     <img v-if="getBrand(car.brand)" class="absolute top-[12px] left-[12px] w-[30px]" :src="getBrand(car.brand).logo" :alt="getBrand(car.brand).name" :title="getBrand(car.brand).name">
                     <img class="h-[90px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
                     <div class="flex justify-center items-center px-[10px] pt-[8px] border-t-[1px] border-t-main">
