@@ -270,6 +270,47 @@
             }
         )
     }
+    const updateCompany = () => {
+        const fileContact = document.getElementById('fileInputContact').files[0];
+        const fileAbout = document.getElementById('fileInputAbout').files[0];
+        if (fileContact) {
+            postFormData('admin/addCompanyImage', {
+                file: fileContact
+            }, function () {
+                console.log('Başarılı');
+            }, function (error) {
+                console.error('Bir hata oluştu:', error);
+            });
+        }
+        if (fileAbout) {
+            postFormData('admin/addCompanyImage', {
+                file: fileAbout
+            }, function () {
+                console.log('Başarılı');
+            }, function (error) {
+                console.error('Bir hata oluştu:', error);
+            });
+        }
+        postData('company/update', {
+            contact: {
+                tel: document.getElementById('companyTel').value,
+                fax: document.getElementById('companyFax').value,
+                mail: document.getElementById('companyMail').value,
+                address: document.getElementById('companyAddress').value,
+                img: fileContact ? fileContact.name : contactData.value.img
+            },
+            about: {
+                description: document.getElementById('companyAbout').value,
+                img: fileAbout ? fileAbout.name : aboutData.value.img
+            }
+        }, function () {
+            console.log('Başarılı');
+        }, function (error) {
+            console.error('Bir hata oluştu:', error);
+        }).then(() => {
+            getCompany();
+        });
+    }
     const clearContact = () => {
         selectedImageContact.value = null;
         document.getElementById('fileInputContact').value = null;
@@ -382,7 +423,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="w-[420px] md:w-[90%] pb-[6px] pt-[2px] border-[1px] rounded-[20px] border-second-shadow shadow-md shadow-second-shadow bg-second text-white text-[22px] font-bold">Kaydet</button>
+                <button @click="updateCompany()" class="w-[420px] md:w-[90%] pb-[6px] pt-[2px] border-[1px] rounded-[20px] border-second-shadow shadow-md shadow-second-shadow bg-second text-white text-[22px] font-bold">Kaydet</button>
             </div>
             
         </div>
