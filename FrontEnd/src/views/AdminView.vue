@@ -1,15 +1,19 @@
 <script setup>
     import { ref, onMounted } from 'vue';
     import { fetchData, postData, postFormData } from '../scripts/ajax.js';
-    import { getBannerImage, getBrand, getBrandImage, getCarImage } from '../scripts/common.js';
+    import { getBannerImage, getBrand, getBrandImage, getCarImage, getCompanyImage } from '../scripts/common.js';
 
     const banners = ref([]);
     const brands = ref([]);
     const cars = ref([]);
+    const contactData = ref([]);
+    const aboutData = ref([]);
     
     const selectedImage = ref(null);
     const selectedImages = ref(null);
-    const triggerFileInput = () => {
+    const selectedImageContact = ref(null);
+    const selectedImageAbout = ref(null);
+    const triggerFileInput = (event) => {
         if (document.getElementById('bannerModal').classList.contains('open')) {
             document.getElementById('fileInputBanner').click();
         }
@@ -19,22 +23,29 @@
         if (document.getElementById('carModal').classList.contains('open')) {
             document.getElementById('fileInputCar').click();
         }
+        if (event.target == document.getElementById('ContactImage')) {
+            document.getElementById('fileInputContact').click();
+        }
+        if (event.target == document.getElementById('AboutImage')) {
+            document.getElementById('fileInputAbout').click();
+        }
     };
     const handleFileChange = (event) => {
         console.log(event.target.files)
-        selectedImages.value = [];
         if (document.getElementById('carModal').classList.contains('open')) {
+            selectedImages.value = [];
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                selectedImages.value.push(e.target.result);
+                    selectedImages.value.push(e.target.result);
                 };
                 reader.readAsDataURL(files[i]);
             }
-        } else {
+        } 
+        else {
             const file = event.target.files[0];
-            handleImage(file);
+            handleImage(file, event.target);
         }
     };
     const handleDragOver = (event) => {
@@ -43,15 +54,23 @@
     const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
-        handleImage(file);
+        handleImage(file, event.target);
     }; 
-    const handleImage = (file) => {
+    const handleImage = (file, target) => {
         if (!file) {
             return;
         }
         const reader = new FileReader();
         reader.onload = (e) => {
-            selectedImage.value = e.target.result;
+            if (target == document.getElementById('ContactImage') || target == document.getElementById('fileInputContact')) {
+                selectedImageContact.value = e.target.result;
+            }
+            else if (target == document.getElementById('AboutImage') || target == document.getElementById('fileInputAbout')) {
+                selectedImageAbout.value = e.target.result;
+            }
+            else {
+                selectedImage.value = e.target.result;
+            }
         };
         reader.readAsDataURL(file);
     };
@@ -231,8 +250,33 @@
     };
     const closeCarModal = () => {
         document.getElementById('carModal').classList.remove('open');
-        selectedImage.value = null;
+        selectedImages.value = null;
         resetFormInputs();
+    };
+
+    //Company
+    const getCompany = async () => {
+        await fetchData('company/published',
+            function(data) {
+                data.map((item) => {
+                    contactData.value = item.contact;
+                    aboutData.value = item.about;
+                    selectedImageContact.value = getCompanyImage(item.contact.img);
+                    selectedImageAbout.value = getCompanyImage(item.about.img);
+                });
+            },
+            function(error) {
+                console.error('Bir hata oluştu:', error)
+            }
+        )
+    }
+    const clearContact = () => {
+        selectedImageContact.value = null;
+        document.getElementById('fileInputContact').value = null;
+    };
+    const clearAbout = () => {
+        selectedImageAbout.value = null;
+        document.getElementById('fileInputAbout').value = null;
     };
 
     //Ready
@@ -240,6 +284,7 @@
         getBanners();
         getBrands();
         getCars();
+        getCompany();
     });
 </script>
 
@@ -303,9 +348,43 @@
         <div class="w-full">
             <h1 class="text-[20px] text-main dark:text-white">Şirket</h1>
             <hr class="mb-[10px]">
-            <div class="flex items-center justify-center gap-[10px] flex-wrap p-[10px]">
-                
+            <div class="flex gap-[10px] flex-wrap justify-center items-start p-[10px] mt-[12px] border-[1px] rounded-[10px]">
+                <div v-if="contactData" class="flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
+                    <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">İletişim</h1>
+                    <input :value="contactData.tel" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" id="companyTel" placeholder="Telefon" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
+                    <input :value="contactData.fax" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" id="companyFax" placeholder="Fax" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
+                    <input :value="contactData.mail" type="email" id="companyMail" placeholder="Email" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
+                    <textarea :value="contactData.address" id="companyAddress" placeholder="Adres" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[80px]"></textarea>
+                    <input type="file" id="fileInputContact" ref="fileInputContact" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp">
+                    <div id="ContactImage" class="w-full h-[340px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
+                        <div v-if="!selectedImageContact" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
+                            <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
+                            <font-awesome-icon icon="fa-solid fa-upload" size="xl" />
+                        </div>
+                        <div v-else class="w-full h-full rounded-[6px] overflow-hidden relative">
+                            <button @click="clearContact()" class="gelatine clearItem absolute top-[8px] right-[8px] py-[8px] px-[12px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']" size="xl"/></button>
+                            <img :src="selectedImageContact" alt="Contact" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+                <div v-if="aboutData" class="flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
+                    <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">Hakkında</h1>
+                    <textarea :value="aboutData.description" id="companyAbout" placeholder="Hakkında" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[126px]"></textarea>
+                    <input type="file" id="fileInputAbout" ref="fileInputAbout" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp">
+                    <div id="AboutImage" class="w-full h-[422px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
+                        <div v-if="!selectedImageAbout" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
+                            <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
+                            <font-awesome-icon icon="fa-solid fa-upload" size="xl" />
+                        </div>
+                        <div v-else class="w-full h-full rounded-[6px] overflow-hidden relative">
+                            <button @click="clearAbout()" class="gelatine clearItem absolute top-[8px] right-[8px] py-[8px] px-[12px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']" size="xl"/></button>
+                            <img :src="selectedImageAbout" alt="Contact" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+                <button class="w-[420px] md:w-[90%] pb-[6px] pt-[2px] border-[1px] rounded-[20px] border-second-shadow shadow-md shadow-second-shadow bg-second text-white text-[22px] font-bold">Kaydet</button>
             </div>
+            
         </div>
     </div>
 
