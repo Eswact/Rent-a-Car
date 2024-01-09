@@ -31,7 +31,7 @@
         }
     };
     const handleFileChange = (event) => {
-        console.log(event.target.files)
+        console.log(event.target.files) // Sürükle bırakta burası çalışmıyor
         if (document.getElementById('carModal').classList.contains('open')) {
             selectedImages.value = [];
             const files = event.target.files;
@@ -54,9 +54,17 @@
     const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
+        
+        const inputElement = event.target.closest('.containImageSelector').querySelector('input[type="file"]');
+        console.log(inputElement);
+        if (inputElement) {
+            inputElement.files = event.dataTransfer.files;
+        }
+
         handleImage(file, event.target);
     }; 
     const handleImage = (file, target) => {
+        console.log(file) // Sürükle bırakta burası çalışıyor doğru geliyor
         if (!file) {
             return;
         }
@@ -390,7 +398,7 @@
             <h1 class="text-[20px] text-main dark:text-white">Şirket</h1>
             <hr class="mb-[10px]">
             <div class="flex gap-[10px] flex-wrap justify-center items-start p-[10px] mt-[12px] border-[1px] rounded-[10px]">
-                <div v-if="contactData" class="flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
+                <div v-if="contactData" class="containImageSelector flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
                     <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">İletişim</h1>
                     <input :value="contactData.tel" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" id="companyTel" placeholder="Telefon" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
                     <input :value="contactData.fax" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" id="companyFax" placeholder="Fax" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
@@ -408,7 +416,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="aboutData" class="flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
+                <div v-if="aboutData" class="containImageSelector flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
                     <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">Hakkında</h1>
                     <textarea :value="aboutData.description" id="companyAbout" placeholder="Hakkında" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[126px]"></textarea>
                     <input type="file" id="fileInputAbout" ref="fileInputAbout" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp">
@@ -438,7 +446,7 @@
                 <button class="absolute top-[-11px] right-[-13px] text-second" @click="closeBannerModal"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
             </div>
             <form class="flex flex-col gap-[10px] p-[10px]" enctype="multipart/form-data" method="POST">
-                <div class="relative">
+                <div class="containImageSelector relative">
                     <input type="file" id="fileInputBanner" ref="fileInputBanner" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp" required>
                     <div class="w-full h-[240px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                         <div v-if="!selectedImage" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
@@ -464,7 +472,7 @@
                 <button class="absolute top-[-11px] right-[-13px] text-second" @click="closeBrandModal"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
             </div>
             <form class="flex flex-col gap-[10px] p-[10px]" enctype="multipart/form-data" method="POST">
-                <div class="relative">
+                <div class="containImageSelector relative">
                     <input type="file" id="fileInputBrand" ref="fileInputBrand" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp" required>
                     <div class="w-full h-[240px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                         <div v-if="!selectedImage" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
