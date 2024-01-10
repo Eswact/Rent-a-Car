@@ -1,6 +1,26 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { getBrand, getBannerImage } from '../scripts/common.js';
+import { fetchData } from '../scripts/ajax.js';
+import { getBrand, getBannerImage, getCarImage } from '../scripts/common.js';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const cars = ref([]);
+const getDetailsPage = (carId) => {
+  router.push({ path: `/detail/${carId}` });
+};
+const fetchCars = async () => {
+  await fetchData('cars/published',
+    function(data) {
+      let lastFourCars = data.slice(-4);
+      cars.value = lastFourCars;
+    },
+    function(error) {
+      console.error('Bir hata oluştu:', error);
+    }
+  );
+};
+
 
 const itemsToShow = ref(10);
 
@@ -14,7 +34,7 @@ onMounted(() => {
     } else if (windowWidth >= 800) {
       itemsToShow.value = 6;
     } else {
-      itemsToShow.value = 4;
+      itemsToShow.value = 3;
     }
   };
 
@@ -24,6 +44,8 @@ onMounted(() => {
   onBeforeUnmount(() => {
     window.removeEventListener('resize', handleResize);
   });
+
+  fetchCars();
 });
 
 function directCarsWithBrandId(brandId) {
@@ -55,7 +77,7 @@ function directCarsWithBrandId(brandId) {
     <CustomCarousel :wrap-around="true" :items-to-show="itemsToShow" :slides="secondCarouselSlides" class="px-[50px]">
       <template v-slot:default>
         <Slide v-for="slide in secondCarouselSlides" :key="slide.id" :slide="slide">
-          <div v-if="slide" @click="directCarsWithBrandId(slide.brandId)"  class="flex items-center justify-center w-[120px] h-[80px] p-[10px] sm:w-[60px] sm:h-[60px] dark:bg-[#efefef] rounded-[10px] border-[#ddd] border-[1px] cursor-pointer">
+          <div v-if="slide" @click="directCarsWithBrandId(slide.brandId)"  class="flex items-center justify-center w-[120px] h-[80px] p-[10px] sm:w-[70px] sm:h-[70px] dark:bg-[#efefef] rounded-[10px] border-[#ddd] border-[1px] cursor-pointer">
             <img :src="getBrand(slide.brandId).logo" :alt="slide.name" class="w-full h-full object-contain" />
           </div>
         </Slide>
@@ -65,13 +87,17 @@ function directCarsWithBrandId(brandId) {
       </template>
     </CustomCarousel>
 
-    <div class="w-full py-[10px] px-[20px] flex flex-col gap-[10px] items-start">
-      <span class="text-[20px]">Son Eklenen Araçlar</span>
+    <div class="w-full py-[5px] px-[20px] flex flex-col gap-[10px] items-start">
+      <span class="text-[20px] w-full border-b-[1px] pb-[4px] border-main-shadow">Son Eklenen Araçlar</span>
       <div class="w-full flex gap-[10px] flex-wrap justify-center items-center">
-        <div class="border-[1px] border-[#ddd] w-[calc(25%-8px)] h-[200px] rounded-[12px]"></div>
-        <div class="border-[1px] border-[#ddd] w-[calc(25%-8px)] h-[200px] rounded-[12px]"></div>
-        <div class="border-[1px] border-[#ddd] w-[calc(25%-8px)] h-[200px] rounded-[12px]"></div>
-        <div class="border-[1px] border-[#ddd] w-[calc(25%-8px)] h-[200px] rounded-[12px]"></div>
+        <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] w-[calc(25%-16px)] border-main 2xl:min-w-[340px] 2xl:w-[32%] xl:w-[340px] p-[20px] flex flex-col gap-[8px] bg-white shadow-md shadow-main-shadow relative ">
+          <img v-if="getBrand(car.brand)" class="absolute top-[12px] left-[12px] w-[46px]" :src="getBrand(car.brand).logo" :alt="getBrand(car.brand).name" :title="getBrand(car.brand).name">
+          <img class="h-[124px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
+          <div class="flex justify-between px-[10px] pt-[8px] border-t-[1px] border-t-main">
+            <span class="text-[20px] text-main">{{ car.title }}</span>
+            <button @click="getDetailsPage(car.carId)" class="gelatine text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
