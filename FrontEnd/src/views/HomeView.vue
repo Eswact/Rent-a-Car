@@ -12,7 +12,7 @@ const getDetailsPage = (carId) => {
 const fetchCars = async () => {
   await fetchData('cars/published',
     function(data) {
-      let lastFourCars = data.slice(-4);
+      let lastFourCars = data.slice(-4).reverse();
       cars.value = lastFourCars;
     },
     function(error) {
