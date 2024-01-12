@@ -9,25 +9,27 @@
     if (getlocalstorage('dark-mode') != '') {
       if (getlocalstorage('dark-mode') == 'true') {
         document.documentElement.classList.add('dark');
-        darkModeToggle.checked = true;
+        darkModeToggle.dataset.checked = true;
       } else {
         document.documentElement.classList.remove('dark');
-        darkModeToggle.checked = false;
+        darkModeToggle.dataset.checked = false;
       }
     } else {
       const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
       if (prefersDarkScheme.matches) {
         document.documentElement.classList.add('dark');
-        darkModeToggle.checked = true;
+        darkModeToggle.dataset.checked = true;
       }
     }
-    darkModeToggle.addEventListener('change', () => {
-      if (darkModeToggle.checked) {
-        document.documentElement.classList.add('dark');
-        setlocalstorage('dark-mode', 'true');
-      } else {
+    darkModeToggle.addEventListener('click', () => {
+      if (darkModeToggle.dataset.checked == 'true') {
+        darkModeToggle.dataset.checked = false;
         document.documentElement.classList.remove('dark');
         setlocalstorage('dark-mode', 'false');
+      } else {
+        darkModeToggle.dataset.checked = true;
+        document.documentElement.classList.add('dark');
+        setlocalstorage('dark-mode', 'true');
       }
     });
     // hamburger-menu
@@ -60,7 +62,7 @@
         </ul>
       </nav>
       <div class="w-[10%] md:w-[auto] flex items-center justify-end gap-[24px]">
-        <input type="checkbox" id="dark-mode-slider" class="switch">
+        <span id="dark-mode-slider" class="darkmode-switch" data-checked="false"></span>
         <font-awesome-icon class="hamburger-button hidden sm:block text-[2rem] text-main dark:text-second" icon="fa-solid fa-bars" />
       </div>
   </header>
