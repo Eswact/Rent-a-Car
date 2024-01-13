@@ -66,25 +66,29 @@ onMounted(() => {
             <div class="flex flex-col gap-[15px] items-start">
               <div class="flex items-center gap-[10px] text-main dark:text-white">
                 <font-awesome-icon class="w-[50px]" icon="fa-solid fa-users" size="2xl" />
-                <span class="font-semibold">5 Yetişkin</span>
+                <span class="font-semibold">{{ carDetail.people }} Yetişkin</span>
               </div>
               <div class="flex items-center gap-[10px] text-main dark:text-white">
                 <font-awesome-icon class="w-[50px]" icon="fa-solid fa-suitcase-rolling" size="2xl" />
-                <span class="font-semibold">1 Büyük bavul</span>
+                <span class="font-semibold">{{ carDetail.capacity }} Büyük bavul</span>
               </div>
               <div class="flex items-center gap-[10px] text-main dark:text-white">
                 <font-awesome-icon class="w-[50px]" icon="fa-solid fa-gas-pump" size="2xl" />
-                <span class="font-semibold">Dizel / Benzin</span>
+                <span v-if="carDetail.gasoline == 1" class="font-semibold">Benzin</span>
+                <span v-else-if="carDetail.gasoline == 2" class="font-semibold">Dizel</span>
+                <span v-else-if="carDetail.gasoline == 3" class="font-semibold">LPG</span>
+                <span v-else-if="carDetail.gasoline == 4" class="font-semibold">Elektrik</span>
+                <span v-else>Bilinmiyor</span>
               </div>
             </div>
             <div class="flex flex-col gap-[15px] items-start">
               <div class="flex items-center gap-[10px] text-second">
                 <font-awesome-icon class="w-[50px]" icon="fa-solid fa-gauge-simple-high" size="2xl" />
-                <span class="font-semibold">4000 km</span>
+                <span class="font-semibold">{{ carDetail.kilometer }} km</span>
               </div>
               <div class="flex items-center gap-[10px] text-second">
                 <font-awesome-icon class="w-[50px]" icon="fa-solid fa-calendar-days" size="2xl" />
-                <span class="font-semibold">21 Yaş ve üzeri</span>
+                <span class="font-semibold">{{ carDetail.age }} Yaş ve üzeri</span>
               </div>
               <div class="flex items-center gap-[10px] text-second">
                 <font-awesome-icon class="w-[50px]" icon="fa-solid fa-credit-card" size="2xl" />
