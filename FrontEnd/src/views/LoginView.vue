@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 import { postData } from '../scripts/ajax';
 import { setlocalstorage } from '../scripts/common';
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 let username = ref('');
 let password = ref('');
@@ -17,8 +20,10 @@ const submitForm = () => {
                 setlocalstorage('user', username.value);
                 window.location.href = '/admin';
             }, 
-            function (error) {
-                alert('Giriş başarısız! :' + error.message);
+            function () {
+                toast.error('Giriş başarısız!', {
+                    timeout: 3000
+                });
             });
     }
 };
@@ -32,8 +37,8 @@ const submitForm = () => {
                 <h1 class="text-center text-2xl font-semibold">Admin Panel</h1>
             </div>
             <form class="w-full flex flex-col justify-center items-center gap-[20px] p-[20px]">
-                <input type="text" name="username" autocomplete="on" v-model="username" placeholder="Kullanıcı Adı" class="p-2 border rounded w-full"  required/>
-                <input type="password" name="password" autocomplete="on" v-model="password" placeholder="Parola" class="p-2 border rounded w-full"  required/>
+                <input type="text" name="username" autocomplete="on" v-model="username" placeholder="Kullanıcı Adı" class="p-2 border rounded w-full text-black"  required/>
+                <input type="password" name="password" autocomplete="on" v-model="password" placeholder="Parola" class="p-2 border rounded w-full text-black"  required/>
                 <button type="submit" @click.prevent="submitForm" class="p-2 bg-blue-500 text-white rounded w-full">Oturum Aç</button>
             </form>
         </div>

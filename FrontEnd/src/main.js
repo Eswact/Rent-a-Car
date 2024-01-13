@@ -4,6 +4,8 @@ import './assets/tailwind.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -14,5 +16,11 @@ const app = createApp(App)
 .component('font-awesome-icon', FontAwesomeIcon)
 
 app.use(router)
+
+const options = {
+    //Toastification options
+};
+
+app.use(Toast, options);
 
 app.mount('#app')

@@ -3,7 +3,9 @@ import { ref, onMounted, nextTick, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { fetchData } from '../scripts/ajax.js';
 import { getDetailsPage, getCarImage, getBrand, convert2Price } from '../scripts/common.js';
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
 const router = useRouter();
 const carId = ref(null);
 const carDetail = ref(null);
@@ -28,6 +30,13 @@ const openPaymentModal = () => {
 };
 const closePaymentModal = () => {
   document.getElementById('paymentModal').classList.remove('open');
+};
+const paymentProcess = () => {
+  toast.error("Ödeme işlemi gerçekleşmedi!");
+  document.querySelectorAll('#paymentModal input').forEach((element) => {
+    element.value = '';
+  });
+  closePaymentModal();
 };
 
 onMounted(() => {
@@ -162,7 +171,7 @@ onMounted(() => {
             <h1 class="text-[20px] text-main font-[600]">Kart Bilgilerinizi Giriniz</h1>
             <button class="absolute top-[-11px] right-[-13px] text-second" @click="closePaymentModal"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
         </div>
-        <form class="flex flex-col gap-[10px] p-[10px]" method="POST">
+        <form class="flex flex-col gap-[10px] p-[10px]" method="POST" @submit.prevent="paymentProcess">
             <div class="flex flex-col">
               <div class="flex flex-col p-[6px]">
                 <label class="text-[14px] h-[20px] text-second" for="creditCard">Kart Numarası:</label>
@@ -183,7 +192,7 @@ onMounted(() => {
                 </div>   
               </div>
             </div>
-            <div class="flex justify-center items-center px-[4px]"><button type="sumbit" @click="saveNewBrand" class="w-full bg-second py-[8px] px-[16px] text-[17px] text-white rounded-[6px]">Ödemeyi Tamamla</button></div>
+            <div class="flex justify-center items-center px-[4px]"><button type="sumbit" class="w-full bg-second py-[8px] px-[16px] text-[17px] text-white rounded-[6px]">Ödemeyi Tamamla</button></div>
         </form>
     </div>
   </div>

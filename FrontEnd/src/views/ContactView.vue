@@ -2,8 +2,10 @@
   import { fetchData, postData } from '../scripts/ajax.js'
   import { getCompanyImage } from '../scripts/common.js'
   import { ref, onMounted } from 'vue'
+  import { useToast } from "vue-toastification";
 
   const contactData = ref({})
+  const toast = useToast();
 
   onMounted(() => {
     fetchData('company/published',
@@ -30,14 +32,18 @@
         document.getElementById('name').value = '';
         document.getElementById('email').value = '';
         document.getElementById('message').value = '';
-        alert('Mesajınız başarıyla gönderildi.');
+        toast.success("Mesajınız başarıyla gönderildi.", {
+          timeout: 3000
+        });
       },
       function(error) {
         console.error('Bir hata oluştu:', error);
         document.getElementById('name').value = '';
         document.getElementById('email').value = '';
         document.getElementById('message').value = '';
-        alert('Mesajınız gönderilirken bir hata oluştu.');
+        toast.error("Mesajınız gönderilirken bir hata oluştu.", {
+          timeout: 3000
+        });
       }
     )
   };

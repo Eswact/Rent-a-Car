@@ -44,6 +44,21 @@
           document.querySelector('.hamburger-menu').classList.remove('open');
         });
     });
+
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'Escape') {
+          // Payment
+          if (document.getElementById('paymentModal') != null) {
+            document.getElementById('paymentModal').classList.remove('open');
+          }
+          // Admin
+          if (document.getElementById('bannerModal') != null) {
+            document.getElementById('bannerModal').classList.remove('open');
+            document.getElementById('brandModal').classList.remove('open');
+            document.getElementById('carModal').classList.remove('open');
+          }
+        }
+    });
   });
 </script>
 

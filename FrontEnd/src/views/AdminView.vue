@@ -2,6 +2,9 @@
     import { ref, onMounted } from 'vue';
     import { fetchData, postData, postFormData } from '../scripts/ajax.js';
     import { getBannerImage, getBrand, getBrandImage, getCarImage, getCompanyImage } from '../scripts/common.js';
+    import { useToast } from "vue-toastification";
+
+    const toast = useToast();
 
     const banners = ref([]);
     const brands = ref([]);
@@ -32,7 +35,6 @@
         }
     };
     const handleFileChange = (event) => {
-        console.log(event.target.files) // Sürükle bırakta burası çalışmıyor
         if (document.getElementById('carModal').classList.contains('open')) {
             selectedImages.value = [];
             const files = event.target.files;
@@ -57,7 +59,6 @@
         const file = event.dataTransfer.files[0];
         
         const inputElement = event.target.closest('.containImageSelector').querySelector('input[type="file"]');
-        console.log(inputElement);
         if (inputElement) {
             inputElement.files = event.dataTransfer.files;
         }
@@ -65,7 +66,6 @@
         handleImage(file, event.target);
     }; 
     const handleImage = (file, target) => {
-        console.log(file) // Sürükle bırakta burası çalışıyor doğru geliyor
         if (!file) {
             return;
         }
@@ -120,9 +120,13 @@
             title: document.getElementById('bannerHeader').value,
             description: document.getElementById('bannerDescription').value
         }, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
+            toast.success("Yeni Afiş Eklendi", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Yeni Afiş Eklenirken Hata", {
+                timeout: 3000
+            });
         }).then(() => {
             getBanners();
         });
@@ -130,9 +134,13 @@
     };
     const deleteBanner = (bannerId) => {
         postData(`home/banners/delete/${bannerId}`, {}, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
+            toast.success("Afiş Kaldırıldı", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Afiş Kaldırılırken Hata", {
+                timeout: 3000
+            });
         }).then(() => {
             getBanners();
         });
@@ -171,9 +179,13 @@
             name: document.getElementById('brandName').value,
             logo: file.name
         }, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
+            toast.success("Yeni Marka Eklendi", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Yeni Marka Eklenirken Hata", {
+                timeout: 3000
+            });
         }).then(() => {
             getBrands();
         });
@@ -181,9 +193,13 @@
     };
     const deleteBrand = (brandId) => {
         postData(`brands/delete/${brandId}`, {}, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
+            toast.success("Marka Kaldırıldı", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Marka Kaldırılırken Hata", {
+                timeout: 3000
+            });
         }).then(() => {
             getBrands();
         });
@@ -253,9 +269,13 @@
             payment: 1,
             dailyPrice: document.getElementById('carDailyPrice').value
         }, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
+            toast.success("Yeni Araba Eklendi", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Yeni Araba Eklenirken Hata", {
+                timeout: 3000
+            });
         }).then(() => {
             getCars();
         });
@@ -263,9 +283,13 @@
     };
     const deleteCar = (carId) => {
         postData(`cars/delete/${carId}`, {}, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
+            toast.success("Araba Kaldırıldı", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Araba Kaldırılırken Hata", {
+                timeout: 3000
+            });
         }).then(() => {
             getCars();
         });
@@ -329,9 +353,13 @@
                 img: fileAbout ? fileAbout.name : aboutData.value.img
             }
         }, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
+            toast.success("Şirket Bilgileri Güncellendi", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Şirket Bilgileri Güncellenirken Hata", {
+                timeout: 3000
+            });
         }).then(() => {
             getCompany();
         });
@@ -415,7 +443,7 @@
         <div class="w-full">
             <h1 class="text-[20px] text-main dark:text-white">Şirket</h1>
             <hr class="mb-[10px]">
-            <div class="flex gap-[10px] flex-wrap justify-center items-start p-[10px] mt-[12px] border-[1px] rounded-[10px]">
+            <div id="companyInfo" class="flex gap-[10px] flex-wrap justify-center items-start p-[10px] mt-[12px] border-[1px] rounded-[10px]">
                 <div v-if="contactData" class="containImageSelector flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
                     <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">İletişim</h1>
                     <input :value="contactData.tel" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" id="companyTel" placeholder="Telefon" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
@@ -587,5 +615,14 @@
     }
     #carModal.open {
         display: flex;
+    }
+    .formInputs {
+        color: #333;
+    }
+    .formSelects {
+        color: #333;
+    }
+    #companyInfo input, #companyInfo textarea {
+        color: #333;
     }
 </style>
