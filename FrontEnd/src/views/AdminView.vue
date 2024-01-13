@@ -457,7 +457,7 @@
 
     <!-- Modals -->
     <!-- Banner -->
-    <div id="bannerModal" class="flex fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
+    <div id="bannerModal" class="z-20 fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
         <div class="bg-white w-[800px] rounded-[10px] relative border-[1px] border-main-shadow shadow-lg shadow-main-shadow max-w-[95%]">
             <div class="justify-between items-center px-[16px] py-[10px] border-b-[1px] shadow-md border-main-shadow">
                 <h1 class="text-[20px] text-main font-[600]">Banner Ekle</h1>
@@ -483,7 +483,7 @@
         </div>
     </div>
     <!-- Brand -->
-    <div id="brandModal" class="flex fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
+    <div id="brandModal" class="z-20 fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
         <div class="bg-white w-[400px] rounded-[10px] relative border-[1px] border-main-shadow shadow-lg shadow-main-shadow max-w-[95%]">
             <div class="justify-between items-center px-[16px] py-[10px] border-b-[1px] shadow-md border-main-shadow">
                 <h1 class="text-[20px] text-main font-[600]">Marka Ekle</h1>
@@ -508,7 +508,7 @@
         </div>
     </div>
     <!-- Car -->
-    <div id="carModal" class="flex fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
+    <div id="carModal" class="z-20 fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
         <div class="bg-white w-[800px] rounded-[10px] relative border-[1px] border-main-shadow shadow-lg shadow-main-shadow max-w-[95%]">
             <div class="justify-between items-center px-[16px] py-[10px] border-b-[1px] shadow-md border-main-shadow">
                 <h1 class="text-[20px] text-main font-[600]">Araba Ekle</h1>

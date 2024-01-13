@@ -22,6 +22,14 @@ const getSimilarCars = async () => {
   );
 };
 
+//Payment Modal
+const openPaymentModal = () => {
+  document.getElementById('paymentModal').classList.add('open');
+};
+const closePaymentModal = () => {
+  document.getElementById('paymentModal').classList.remove('open');
+};
+
 onMounted(() => {
   if (router.currentRoute.value.params.carId) {
     carId.value = router.currentRoute.value.params.carId;
@@ -52,6 +60,7 @@ onMounted(() => {
       getSimilarCars();
     });
   }
+
   //Benzer Araçlar kısmı kullanılırsa
   watch(
     () => router.currentRoute.value.params.carId,
@@ -121,7 +130,7 @@ onMounted(() => {
           </div>
           <!-- price -->
           <div class="flex items-center gap-[16px]">
-            <button class="w-[164px] p-[8px] rounded-[10px] border-[1px] border-[#00823cbf] text-[18px] text-[#00823cbf] dark:bg-[#00823cbf] dark:text-white shadow-md shadow-[#00823c57] font-medium hover:bg-[#00823cbf] hover:text-white dark:hover:bg-[white] dark:hover:text-[#00823cbf] transition-all">Hemen Kirala</button>
+            <button @click="openPaymentModal()" class="w-[164px] p-[8px] rounded-[10px] border-[1px] border-[#00823cbf] text-[18px] text-[#00823cbf] dark:bg-[#00823cbf] dark:text-white shadow-md shadow-[#00823c57] font-medium hover:bg-[#00823cbf] hover:text-white dark:hover:bg-[white] dark:hover:text-[#00823cbf] transition-all">Hemen Kirala</button>
             <span class="text-main font-semibold dark:text-white"><span class="text-[24px]">{{ convert2Price(carDetail.dailyPrice) }}</span> / Günlük</span>
           </div>
         </div>
@@ -130,7 +139,7 @@ onMounted(() => {
     <div class="w-full flex flex-col gap-[20px]">
       <hr>
       <h3 class="absolute text-[20px] mt-[-17px] ml-[25px] bg-[white] dark:bg-dark">Benzer Araçlar</h3>
-      <div class="w-full flex gap-[10px] flex-wrap justify-start items-center pl-[20px]">
+      <div class="w-full flex gap-[10px] flex-wrap justify-start xl:justify-center items-center px-[20px] xl:px-0">
         <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] w-[calc(25%-16px)] border-main 2xl:min-w-[340px] 2xl:w-[32%] xl:w-[340px] p-[20px] flex flex-col gap-[8px] shadow-md shadow-main-shadow relative ">
           <img v-if="getBrand(car.brand)" class="absolute top-[12px] left-[12px] h-[46px]" :src="getBrand(car.brand).logo" :alt="getBrand(car.brand).name" :title="getBrand(car.brand).name">
           <img class="h-[124px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
@@ -142,9 +151,41 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <!-- loading -->
   <div v-else>
     <p>Yükleniyor...</p>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="z-20 fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
+    <div class="bg-white w-[600px] rounded-[10px] relative border-[1px] border-main-shadow shadow-lg shadow-main-shadow max-w-[95%]">
+        <div class="justify-between items-center px-[16px] py-[10px] border-b-[1px] shadow-md border-main-shadow">
+            <h1 class="text-[20px] text-main font-[600]">Kart Bilgilerinizi Giriniz</h1>
+            <button class="absolute top-[-11px] right-[-13px] text-second" @click="closePaymentModal"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
+        </div>
+        <form class="flex flex-col gap-[10px] p-[10px]" method="POST">
+            <div class="flex flex-col">
+              <div class="flex flex-col p-[6px]">
+                <label class="text-[14px] h-[20px] text-second" for="creditCard">Kart Numarası:</label>
+                <input id="creditCard" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+              </div> 
+              <div class="flex flex-col p-[6px]">
+                <label class="text-[14px] h-[20px] text-second" for="nameSurname">Ad Soyad</label>
+                <input id="nameSurname" placeholder="Adınız Soyadınız" type="text" maxlength="30" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+              </div>   
+              <div class="flex justify-between w-full">
+                <div class="flex flex-col p-[6px] w-[50%]">
+                  <label class="text-[14px] h-[20px] text-second" for="cardExDate">Son Kullanma Tarihi</label>
+                  <input id="cardExDate" type="month" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+                </div>
+                <div class="flex flex-col p-[6px] w-[50%]">
+                  <label class="text-[14px] h-[20px] text-second" for="cvv">CVV</label>
+                  <input id="cvv" type="number" maxlength="3" placeholder="xxx" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+                </div>   
+              </div>
+            </div>
+            <div class="flex justify-center items-center px-[4px]"><button type="sumbit" @click="saveNewBrand" class="w-full bg-second py-[8px] px-[16px] text-[17px] text-white rounded-[6px]">Ödemeyi Tamamla</button></div>
+        </form>
+    </div>
   </div>
 </template>
 
@@ -168,5 +209,11 @@ onMounted(() => {
     opacity: 75%;
     filter: grayscale(50%);
     border-radius: 6px;
+  }
+  #paymentModal {
+    display: none;
+  }
+  #paymentModal.open {
+    display: flex;
   }
 </style>

@@ -68,6 +68,13 @@ onMounted(() => {
 
     applyFilters();
   });
+
+  document.getElementById('clearFilter').addEventListener('click', () => {
+    searchTerm.value = '';
+    selectedBrand.value = 0;
+    selectedCategory.value = 0;
+    applyFilters();
+  });
 });
 
 function applyFilters() {
@@ -94,7 +101,7 @@ function applyFilters() {
         <option v-for="category in categories" :key="category.catId" :value="category.catId">{{ category.name }}</option>
       </select>
     </div>
-    <button class="text-[18px] font-[600] bg-[#ee5d5d1e] text-second border-second border-[1px] py-[3px] px-[8px] rounded-[10px]">Temizle</button>
+    <button id="clearFilter" class="text-[18px] font-[600] bg-[#ee5d5d1e] text-second border-second border-[1px] py-[3px] px-[8px] rounded-[10px]">Temizle</button>
   </div>
   <hr class="mt-[10px] mb-[20px]">
   <!-- cars -->
