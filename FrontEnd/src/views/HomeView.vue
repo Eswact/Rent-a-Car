@@ -1,14 +1,12 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { fetchData } from '../scripts/ajax.js';
-import { getBrand, getBannerImage, getCarImage } from '../scripts/common.js';
+import { getDetailsPage, getBrand, getBannerImage, getCarImage } from '../scripts/common.js';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const cars = ref([]);
-const getDetailsPage = (carId) => {
-  router.push({ path: `/detail/${carId}` });
-};
+
 const fetchCars = async () => {
   await fetchData('cars/published',
     function(data) {
@@ -90,12 +88,12 @@ function directCarsWithBrandId(brandId) {
     <div class="w-full py-[5px] px-[20px] flex flex-col gap-[10px] items-start">
       <span class="text-[20px] w-full border-b-[1px] pb-[4px] border-main-shadow">Son Eklenen Araçlar</span>
       <div class="w-full flex gap-[10px] flex-wrap justify-center items-center">
-        <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] w-[calc(25%-16px)] border-main 2xl:min-w-[340px] 2xl:w-[32%] xl:w-[340px] p-[20px] flex flex-col gap-[8px] bg-white shadow-md shadow-main-shadow relative ">
-          <img v-if="getBrand(car.brand)" class="absolute top-[12px] left-[12px] w-[46px]" :src="getBrand(car.brand).logo" :alt="getBrand(car.brand).name" :title="getBrand(car.brand).name">
+        <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] w-[calc(25%-16px)] border-main 2xl:min-w-[340px] 2xl:w-[32%] xl:w-[340px] p-[20px] flex flex-col gap-[8px] shadow-md shadow-main-shadow relative ">
+          <img v-if="getBrand(car.brand)" class="absolute top-[12px] left-[12px] h-[46px]" :src="getBrand(car.brand).logo" :alt="getBrand(car.brand).name" :title="getBrand(car.brand).name">
           <img class="h-[124px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
           <div class="flex justify-between px-[10px] pt-[8px] border-t-[1px] border-t-main">
-            <span class="text-[20px] text-main">{{ car.title }}</span>
-            <button @click="getDetailsPage(car.carId)" class="gelatine text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
+            <span class="text-[20px] text-main dark:text-white">{{ car.title }}</span>
+            <button @click="getDetailsPage(router, car.carId)" class="gelatine text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
           </div>
         </div>
       </div>

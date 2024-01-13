@@ -41,6 +41,7 @@ exports.create = async (req, res) => {
       carId: req.body.carId,
       title: req.body.title,
       brand: req.body.brand,
+      category: req.body.category,
       image: req.body.images[0]
     });
     const newCarDetail = new carDetails(req.body);

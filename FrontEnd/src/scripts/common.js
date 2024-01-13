@@ -1,5 +1,9 @@
 import { fetchData } from '../scripts/ajax.js'
 
+const getDetailsPage = (router, carId) => {
+    router.push({ path: `/detail/${carId}` });
+};
+
 function setlocalstorage(tmpname, tmpvalue) {
     window.localStorage.setItem(tmpname, encodeURIComponent(tmpvalue));
 }
@@ -21,6 +25,15 @@ fetchData(`brands/published`,
         console.error('Bir hata oluştu:', error);
     }
 );
+var categoryList;
+fetchData(`categories/published`, 
+    async (data) => {
+        categoryList = data;
+    },
+    (error) => {
+        console.error('Bir hata oluştu:', error);
+    }
+);
 
 function getCarImage(filename) {
     return `http://localhost:3000/uploads/cars/${filename}`;
@@ -33,6 +46,13 @@ function getBrand (brandId) {
         logo: `http://localhost:3000/uploads/brands/${brand.logo}`,
         name: brand.name,
       }
+    : null;
+};
+
+function getCategory (catId) {
+    const category = categoryList.find(x => x.catId === catId);
+    return category
+    ? category.name
     : null;
 };
 
@@ -59,4 +79,4 @@ function convert2Price(value) {
     return str + "₺";
 }
 
-export { setlocalstorage, getlocalstorage, getCarImage, getBrand, getBrandImage, getCompanyImage, getBannerImage, convert2Price };
+export { getDetailsPage, setlocalstorage, getlocalstorage, getCarImage, getBrand, getCategory, getBrandImage, getCompanyImage, getBannerImage, convert2Price };

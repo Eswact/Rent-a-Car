@@ -27,7 +27,7 @@ exports.findOne = async (req, res) => {
       res.json(response);
     }
   } catch (error) {
-    res.status(500).send({ message: "Error retrieving brand with id=" + id });
+    res.status(500).send({ message: "Error retrieving brand with id=" + brandId });
   }
 };
 

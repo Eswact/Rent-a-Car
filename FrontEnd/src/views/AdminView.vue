@@ -5,6 +5,7 @@
 
     const banners = ref([]);
     const brands = ref([]);
+    const categories = ref([]);
     const cars = ref([]);
     const contactData = ref([]);
     const aboutData = ref([]);
@@ -85,7 +86,9 @@
     const resetFormInputs = () => {
         document.querySelectorAll('.formInputs').forEach(function (e) {
             e.value = null;
-            console.log(e.value)
+        });
+        document.querySelectorAll('.formSelects').forEach(function (e) {
+            e.value = 0;
         });
     };
 
@@ -194,6 +197,19 @@
         resetFormInputs();
     };
 
+    //Categories
+    const getCategory = async () => {
+        fetchData('categories/published',
+            function (data) {
+                categories.value = data;
+                console.log(categories.value);
+            },
+            function (error) {
+                console.error('Bir hata oluştu:', error);
+            }
+        );
+    };
+
     //Cars
     const getCars = async () => {
         await fetchData('cars/published',
@@ -223,6 +239,7 @@
             images: images,
             title: `${document.getElementById('brandSelect').options[document.querySelector('#brandSelect').selectedIndex].dataset.name} ${document.getElementById('carModel').value}`,
             brand: document.getElementById('brandSelect').value,
+            category: document.getElementById('categorySelect').value,
             model: {
                 name: document.getElementById('carModel').value,
                 year: document.getElementById('carYear').value
@@ -332,6 +349,7 @@
     onMounted(() => {
         getBanners();
         getBrands();
+        getCategory();
         getCars();
         getCompany();
     });
@@ -507,8 +525,12 @@
                         <img v-for="image in selectedImages" :key="image" :src="image" alt="Selected Images" class="w-[50%] h-[50%] object-cover p-[2px]">
                     </div>
                 </div>
-                <select name="brands" id="brandSelect" class="formInputs w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
-                    <option value=0>Marka Seçimi</option>
+                <select name="categories" id="categorySelect" class="formSelects w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
+                    <option value=0 selected>Kategori Seçimi</option>
+                    <option v-for="category in categories" :key="category.catId" :value="category.catId" :data-name="category.name">{{ category.name }}</option>
+                </select>
+                <select name="brands" id="brandSelect" class="formSelects w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
+                    <option value=0 selected>Marka Seçimi</option>
                     <option v-for="brand in brands" :key="brand.brandId" :value="brand.brandId" :data-name="brand.name">{{ brand.name }}</option>
                 </select>
                 <div class="w-full flex items-center gap-[2%]">
@@ -522,7 +544,7 @@
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
                     <input id="carKilometer" type="number" placeholder="Kilometre" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <select id="carGasoline" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <select id="carGasoline" class="formSelects w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                         <option value="0" selected>Yakıt Seçimi</option>
                         <option value="1">Benzin</option>
                         <option value="2">Dizel</option>

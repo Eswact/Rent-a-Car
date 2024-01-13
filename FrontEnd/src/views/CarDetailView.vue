@@ -1,13 +1,26 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { fetchData } from '../scripts/ajax.js';
-import { getCarImage, getBrand, convert2Price } from '../scripts/common.js';
-
+import { getDetailsPage, getCarImage, getBrand, convert2Price } from '../scripts/common.js';
 
 const router = useRouter();
 const carId = ref(null);
 const carDetail = ref(null);
+const category = ref(null);
+const cars = ref([]);
+
+const getSimilarCars = async () => {
+  await fetchData('cars/published',
+    function(data) {
+      let similarCars = data.filter((car) => car.category == category.value && car.carId != carId.value);
+      cars.value = similarCars.slice(-4).reverse();
+    },
+    function(error) {
+      console.error('Bir hata oluştu:', error);
+    }
+  );
+};
 
 onMounted(() => {
   if (router.currentRoute.value.params.carId) {
@@ -16,6 +29,7 @@ onMounted(() => {
       `cars/detail/${carId.value}`,
       async (data) => {
         carDetail.value = data;
+        category.value = data.category;
         await nextTick(); // Wait for the next DOM update cycle
         document.querySelectorAll('.image-option').forEach((element) => {
           element.addEventListener('click', (event) => {
@@ -34,8 +48,17 @@ onMounted(() => {
       (error) => {
         console.error('Bir hata oluştu:', error);
       }
-    );
+    ).then(() => {
+      getSimilarCars();
+    });
   }
+  //Benzer Araçlar kısmı kullanılırsa
+  watch(
+    () => router.currentRoute.value.params.carId,
+    () => {
+      window.location.reload();
+    }
+  );
 });
 </script>
 
@@ -107,7 +130,16 @@ onMounted(() => {
     <div class="w-full flex flex-col gap-[20px]">
       <hr>
       <h3 class="absolute text-[20px] mt-[-17px] ml-[25px] bg-[white] dark:bg-dark">Benzer Araçlar</h3>
-      <div></div>
+      <div class="w-full flex gap-[10px] flex-wrap justify-start items-center pl-[20px]">
+        <div v-for="car in cars" :key="car.id" class="car-card rounded-[12px] border-[1px] w-[calc(25%-16px)] border-main 2xl:min-w-[340px] 2xl:w-[32%] xl:w-[340px] p-[20px] flex flex-col gap-[8px] shadow-md shadow-main-shadow relative ">
+          <img v-if="getBrand(car.brand)" class="absolute top-[12px] left-[12px] h-[46px]" :src="getBrand(car.brand).logo" :alt="getBrand(car.brand).name" :title="getBrand(car.brand).name">
+          <img class="h-[124px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
+          <div class="flex justify-between items-center px-[10px] pt-[8px] border-t-[1px] border-t-main">
+            <span class="text-[20px] text-main dark:text-white">{{ car.title }}</span>
+            <button @click="getDetailsPage(router, car.carId)" class="gelatine text-[17px] border-1 border-second bg-second text-white p-[6px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <!-- loading -->
