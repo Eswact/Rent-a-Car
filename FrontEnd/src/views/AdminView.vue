@@ -507,22 +507,22 @@
                         <img v-for="image in selectedImages" :key="image" :src="image" alt="Selected Images" class="w-[50%] h-[50%] object-cover p-[2px]">
                     </div>
                 </div>
-                <select name="brands" id="brandSelect" class="w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
+                <select name="brands" id="brandSelect" class="formInputs w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
                     <option value=0>Marka Seçimi</option>
                     <option v-for="brand in brands" :key="brand.brandId" :value="brand.brandId" :data-name="brand.name">{{ brand.name }}</option>
                 </select>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carModel" type="text" placeholder="Model" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input id="carYear" type="number" placeholder="Sene" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carModel" type="text" placeholder="Model" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carYear" type="number" placeholder="Sene" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
-                <textarea id="carDescription" class="border-[1px] px-[12px] py-[6px] rounded-[6px]" placeholder="Açıklama"></textarea>
+                <textarea id="carDescription" class="formInputs border-[1px] px-[12px] py-[6px] rounded-[6px]" placeholder="Açıklama"></textarea>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carPeople" type="number" placeholder="Kişi Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input id="carCapacity" type="number" placeholder="Bagaj Kapasitesi" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carPeople" type="number" placeholder="Kişi Kapasitesi" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carCapacity" type="number" placeholder="Bagaj Kapasitesi" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carKilometer" type="number" placeholder="Kilometre" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <select id="carGasoline" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carKilometer" type="number" placeholder="Kilometre" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <select id="carGasoline" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                         <option value="0" selected>Yakıt Seçimi</option>
                         <option value="1">Benzin</option>
                         <option value="2">Dizel</option>
@@ -531,8 +531,8 @@
                     </select>
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carAge" type="number" placeholder="Yaş Sınırı" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input id="carDailyPrice" type="number" placeholder="Günlük Ücret" class="w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carAge" type="number" placeholder="Yaş Sınırı" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carDailyPrice" type="number" placeholder="Günlük Ücret" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
                 <div class="flex justify-center items-center"><button type="button" @click="saveNewCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
             </form>
