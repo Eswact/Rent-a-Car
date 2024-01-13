@@ -91,7 +91,6 @@
             e.value = 0;
         });
     };
-
     
     //Banners
     const getBanners = async () => {
@@ -375,16 +374,39 @@
 
     //Ready
     onMounted(() => {
+        //Requests
         getBanners();
         getBrands();
         getCategory();
         getCars();
         getCompany();
+        //Tabs
+        const tabs = document.querySelectorAll('.adminTabs span');
+        const settingsContents = document.querySelectorAll('.settingsContent');
+        console.log(tabs)
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(tab => tab.classList.remove('selected'));
+                tab.classList.add('selected');
+                settingsContents.forEach(settingsContent => settingsContent.style.display = 'none');
+                const number = tab.dataset.number;
+                const settingsContent = document.querySelector(`.settingsContent[data-number="${number}"]`);
+                settingsContent.style.display = 'flex';
+            });
+        });
+        document.querySelector('.adminTabs span[data-number="1"]').click();
     });
 </script>
 
 <template>
-    <div class="w-full flex flex-col gap-[20px] py-[20px]">
+    <div class="adminTabs w-full flex items-center justify-around p-[16px] text-[18px] md:px-0">
+        <span data-number="1">Afişler</span>
+        <span data-number="2">Markalar</span>
+        <span data-number="3">Arabalar</span>
+        <span data-number="4">Şirket</span>
+    </div>
+    <!-- Afişler -->
+    <div data-number="1" class="settingsContent w-full flex-col gap-[20px] py-[20px]">
         <div class="w-full">
             <h1 class="text-[20px] text-main dark:text-white">Afişler</h1>
             <hr class="mb-[10px]">
@@ -401,7 +423,8 @@
             </div>
         </div>
     </div>
-    <div class="w-full flex flex-col gap-[20px] py-[20px]">
+    <!-- Markalar -->
+    <div data-number="2" class="settingsContent w-full flex-col gap-[20px] py-[20px]">
         <div class="w-full">
             <h1 class="text-[20px] text-main dark:text-white">Markalar</h1>
             <hr class="mb-[10px]">
@@ -418,7 +441,8 @@
             </div>
         </div>
     </div>
-    <div class="w-full flex flex-col gap-[20px] py-[20px]">
+    <!-- Arabalar -->
+    <div data-number="3" class="settingsContent w-full flex-col gap-[20px] py-[20px]">
         <div class="w-full">
             <h1 class="text-[20px] text-main dark:text-white">Arabalar</h1>
             <hr class="mb-[10px]">
@@ -439,7 +463,8 @@
             </div>
         </div>
     </div>
-    <div class="w-full flex flex-col gap-[20px] py-[20px]">
+    <!-- Şirket -->
+    <div data-number="4" class="settingsContent w-full flex-col gap-[20px] py-[20px]">
         <div class="w-full">
             <h1 class="text-[20px] text-main dark:text-white">Şirket</h1>
             <hr class="mb-[10px]">
@@ -624,5 +649,21 @@
     }
     #companyInfo input, #companyInfo textarea {
         color: #333;
+    }
+    .settingsContent {
+        display: none;
+    }
+    .adminTabs span {
+        cursor: pointer;
+        color: #EE605F;
+        padding: 4px 12px;
+        border: 1px solid #EE605F;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: 2px 2px 8px #ee5d5d5e;
+    }
+    .adminTabs span.selected {
+        background-color: #EE605F;
+        color: white;
     }
 </style>

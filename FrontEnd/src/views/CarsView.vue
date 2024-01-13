@@ -89,8 +89,8 @@ function applyFilters() {
 
 <template>
   <!-- filters -->
-  <div class="w-full px-[20px] flex items-center justify-between flex-wrap gap-[20px]">
-    <div class="flex items-center flex-wrap gap-x-[40px] gap-y-[20px]">
+  <div class="w-full px-[20px] flex items-center justify-between flex-wrap gap-[20px] md:justify-center">
+    <div class="flex items-center flex-wrap gap-x-[40px] gap-y-[20px] md:justify-center">
       <input v-model="searchTerm" id="carNameFilter" type="search" placeholder="Aradığınız Araba" class="w-[160px] text-center text-[17px] text-[#333] dark:text-[#eee] bg-transparent placeholder-[#333] dark:placeholder-[#eee] focus:text-left focus:placeholder-transparent dark:focus:placeholder-transparent dark:border-[#ddd] focus:outline-none focus:border-b-[1px] border-[#555]" />
       <select v-model="selectedBrand" name="brands" id="brandFilter" class="w-[160px] text-[17px] text-[#333] dark:text-[#eee] bg-transparent">
         <option value=0>Marka Seçimi</option>

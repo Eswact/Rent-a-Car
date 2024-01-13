@@ -18,7 +18,6 @@ exports.updateData = async (req, res) => {
   try {
     const companyId = "658877c170b8c5f264229417";
     const updateData = req.body;
-    console.log(companyId)
     const updatedCompany = await company.findOneAndUpdate(
       { _id: companyId },
       { $set: updateData },
