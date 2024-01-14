@@ -9,8 +9,8 @@ import "vue-toastification/dist/index.css";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCar, faHome, faCircleInfo, faHeadset, faBars, faXmark, faUsers, faSuitcaseRolling, faGasPump, faGaugeSimpleHigh, faCalendarDays, faCreditCard, faCircleChevronRight, faPlus, faCircleXmark, faTrashCan, faUpload} from '@fortawesome/free-solid-svg-icons'
-library.add(faCar, faHome, faCircleInfo, faHeadset, faBars, faXmark, faUsers, faSuitcaseRolling, faGasPump, faGaugeSimpleHigh, faCalendarDays, faCreditCard, faCircleChevronRight, faPlus, faCircleXmark, faTrashCan, faUpload)
+import { faCar, faHome, faCircleInfo, faHeadset, faBars, faXmark, faUsers, faSuitcaseRolling, faGasPump, faGaugeSimpleHigh, faCalendarDays, faCreditCard, faCircleChevronRight, faPlus, faCircleXmark, faTrashCan, faUpload, faPhone, faFax, faEnvelope, faLocationDot} from '@fortawesome/free-solid-svg-icons'
+library.add(faCar, faHome, faCircleInfo, faHeadset, faBars, faXmark, faUsers, faSuitcaseRolling, faGasPump, faGaugeSimpleHigh, faCalendarDays, faCreditCard, faCircleChevronRight, faPlus, faCircleXmark, faTrashCan, faUpload, faPhone, faFax, faEnvelope, faLocationDot)
 
 const app = createApp(App)
 .component('font-awesome-icon', FontAwesomeIcon)
