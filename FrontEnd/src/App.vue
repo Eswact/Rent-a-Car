@@ -3,10 +3,22 @@
   import { onMounted } from 'vue'
   import { setlocalstorage, getlocalstorage } from './scripts/common';
 
+  const cookiesClose = () => {
+    document.getElementById('cookies').classList.add('closed');
+  }
+  const cookiesAccept = () => {
+    setlocalstorage('cookies', 'true');
+    document.getElementById('cookies').classList.add('closed');
+  }
+
   onMounted(() => {
+    // cookies
+    if (getlocalstorage('cookies') == 'true') {
+      document.getElementById('cookies').classList.add('closed');
+    }
     // dark-mode
     const darkModeToggle = document.getElementById('dark-mode-slider');
-    if (getlocalstorage('dark-mode') != '') {
+    if (getlocalstorage('dark-mode') != '' && getlocalstorage('cookies') == 'true') {
       if (getlocalstorage('dark-mode') == 'true') {
         document.documentElement.classList.add('dark');
         darkModeToggle.dataset.checked = true;
@@ -98,10 +110,25 @@
   <main v-else>
     <RouterView/>
   </main>
+
+  <div id="cookies" class="fixed left-[10px] bottom-[10px] w-[450px] py-[22px] px-[30px] bg-[rgba(0,0,0,0.8)] rounded-[20px] gap-[20px] border-[1px] border-black shadow-lg shadow-[rgba(0,0,0,0.7)]">
+    <button @click="cookiesClose" class="absolute top-[-10px] right-[-12px] text-second"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
+    <img class="h-[182px]" src="./assets/media/cookies.png">
+    <div class="flex flex-col gap-[16px] pt-[5px] px-[5px]">
+      <span class="text-[12px] text-white">"Çerezleri kabul et" seçeneğine tıklayarak, çerezlerin cihazınızda saklayabileceğini ve Çerez Politikamıza uygun olarak bilgileriniz paylaşılabileceğini kabul etmiş olursunuz.</span>
+      <button @click="cookiesAccept()" class="text-white text-[18px] text-[600] p-[8px] bg-second rounded-[14px] shadow-sm shadow-second-shadow border-[1px] border-second-shadow">Çerezleri Kabul Et</button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
   .active {
     color: #EE605F;
+  }
+  #cookies {
+    display: flex;
+  }
+  #cookies.closed {
+    display: none;
   }
 </style>

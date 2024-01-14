@@ -39,7 +39,7 @@ const paymentProcess = () => {
   closePaymentModal();
 };
 
-onMounted(() => {
+function getCarDetail() {
   if (router.currentRoute.value.params.carId) {
     carId.value = router.currentRoute.value.params.carId;
     fetchData(
@@ -69,12 +69,15 @@ onMounted(() => {
       getSimilarCars();
     });
   }
+}
 
+onMounted(() => {
+  getCarDetail();
   //Benzer Araçlar kısmı kullanılırsa
   watch(
     () => router.currentRoute.value.params.carId,
     () => {
-      window.location.reload();
+      getCarDetail();
     }
   );
 });

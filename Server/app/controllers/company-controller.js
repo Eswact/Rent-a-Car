@@ -15,7 +15,6 @@ exports.getData = async (req, res) => {
 };
 
 exports.updateData = async (req, res) => {
-  console.log(req.body);
   try {
     const companyId = "658877c170b8c5f264229417";
     const updateData = req.body;
