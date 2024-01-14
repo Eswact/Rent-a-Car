@@ -63,7 +63,7 @@
 </script>
 
 <template>
-  <header v-if="$route.path !== '/login' && $route.path !== '/admin'"  class="z-10 bg-white dark:bg-dark fixed top-0 left-0 w-[85%] mx-[7.5%] xl:w-full xl:mx-0 px-[20px] md:px-[10px] pt-[16px] md:pt-[10px] pb-[10px] border-b border-1 border-main dark:border-white text-xl lg:text-lg flex items-center justify-between overflow-hidden">
+  <header v-if="$route.path !== '/login' && $route.path !== '/admin'"  class="z-10 bg-white dark:bg-dark fixed top-0 left-0 w-[85.4%] mx-[7.3%] full:w-[90%] full:mx-[5%] xl:w-full xl:mx-0 px-[20px] md:px-[10px] pt-[16px] md:pt-[10px] pb-[10px] border-b border-1 border-main dark:border-white text-xl lg:text-lg flex items-center justify-between overflow-hidden">
       <nav class="w-[90%] md:w-[auto] flex items-center gap-[5%] lg:gap-[20px] md:gap-[30px]">
         <div class="flex items-center justify-center gap-[16px] lg:gap-[10px] md:gap-[16px]">
           <img class="max-h-[68px] lg:max-h-[60px] md:max-h-[50px] rounded-[50%]" src="./assets/media/logo.jpg" alt="logo">

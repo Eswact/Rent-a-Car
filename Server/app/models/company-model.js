@@ -12,7 +12,10 @@ module.exports = mongoose => {
                 img: String
             },
             about: {
+                header: String,
                 description: String,
+                vision: String,
+                mission: String,
                 img: String
             }
         },

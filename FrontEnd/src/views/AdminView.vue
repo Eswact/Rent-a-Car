@@ -348,7 +348,10 @@
                 img: fileContact ? fileContact.name : contactData.value.img
             },
             about: {
+                header: document.getElementById('aboutHeader').value,
                 description: document.getElementById('companyAbout').value,
+                vision: document.getElementById('aboutVision').value,
+                mission: document.getElementById('aboutMision').value,
                 img: fileAbout ? fileAbout.name : aboutData.value.img
             }
         }, function () {
@@ -469,14 +472,38 @@
             <h1 class="text-[20px] text-main dark:text-white">Şirket</h1>
             <hr class="mb-[10px]">
             <div id="companyInfo" class="flex gap-[10px] flex-wrap justify-center items-start p-[10px] mt-[12px] border-[1px] rounded-[10px]">
-                <div v-if="contactData" class="containImageSelector flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
+                <div v-if="aboutData" class="containImageSelector flex flex-col gap-[10px] p-[20px] w-[58%] md:w-full">
+                    <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">Hakkında</h1>
+                    <div class="w-full flex gap-[10px] sm:flex-col">
+                        <div class="w-[60%] sm:w-full flex flex-col gap-[10px]">
+                            <input :value="aboutData.header" type="text" id="aboutHeader" placeholder="Başlık" class="border-[1px] rounded-[6px] px-[12px] py-[px]">
+                            <textarea :value="aboutData.description" id="companyAbout" placeholder="Hakkında" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[155px]"></textarea>
+                            <textarea :value="aboutData.vision" id="aboutVision" placeholder="Vizyonumuz" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[155px]"></textarea>
+                            <textarea :value="aboutData.mission" id="aboutMision" placeholder="Misyonumuz" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[155px]"></textarea>
+                        </div>
+                        <div class="w-[40%] sm:w-full">
+                            <input type="file" id="fileInputAbout" ref="fileInputAbout" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp">
+                            <div id="AboutImage" class="w-full h-full border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
+                                <div v-if="!selectedImageAbout" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
+                                    <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
+                                    <font-awesome-icon icon="fa-solid fa-upload" size="xl" />
+                                </div>
+                                <div v-else class="w-full h-full rounded-[6px] overflow-hidden relative">
+                                    <button @click="clearAbout()" class="gelatine clearItem absolute top-[8px] right-[8px] py-[8px] px-[12px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']" size="xl"/></button>
+                                    <img :src="selectedImageAbout" alt="Contact" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="contactData" class="containImageSelector flex flex-col gap-[10px] p-[20px] w-[38%] md:w-full">
                     <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">İletişim</h1>
                     <input :value="contactData.tel" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" id="companyTel" placeholder="Telefon" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
                     <input :value="contactData.fax" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" id="companyFax" placeholder="Fax" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
                     <input :value="contactData.mail" type="email" id="companyMail" placeholder="Email" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
                     <textarea :value="contactData.address" id="companyAddress" placeholder="Adres" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[80px]"></textarea>
                     <input type="file" id="fileInputContact" ref="fileInputContact" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp">
-                    <div id="ContactImage" class="w-full h-[340px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
+                    <div id="ContactImage" class="w-full h-[300px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                         <div v-if="!selectedImageContact" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
                             <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
                             <font-awesome-icon icon="fa-solid fa-upload" size="xl" />
@@ -484,21 +511,6 @@
                         <div v-else class="w-full h-full rounded-[6px] overflow-hidden relative">
                             <button @click="clearContact()" class="gelatine clearItem absolute top-[8px] right-[8px] py-[8px] px-[12px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']" size="xl"/></button>
                             <img :src="selectedImageContact" alt="Contact" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                </div>
-                <div v-if="aboutData" class="containImageSelector flex flex-col gap-[10px] p-[20px] w-[48%] md:w-full">
-                    <h1 class="text-[20px] text-main dark:text-white w-full border-b-[1px] border-main-shadow pb-[4px]">Hakkında</h1>
-                    <textarea :value="aboutData.description" id="companyAbout" placeholder="Hakkında" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[126px]"></textarea>
-                    <input type="file" id="fileInputAbout" ref="fileInputAbout" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp">
-                    <div id="AboutImage" class="w-full h-[422px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
-                        <div v-if="!selectedImageAbout" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
-                            <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
-                            <font-awesome-icon icon="fa-solid fa-upload" size="xl" />
-                        </div>
-                        <div v-else class="w-full h-full rounded-[6px] overflow-hidden relative">
-                            <button @click="clearAbout()" class="gelatine clearItem absolute top-[8px] right-[8px] py-[8px] px-[12px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']" size="xl"/></button>
-                            <img :src="selectedImageAbout" alt="Contact" class="w-full h-full object-cover">
                         </div>
                     </div>
                 </div>

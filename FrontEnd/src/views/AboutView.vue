@@ -20,11 +20,14 @@
 </script>
 
 <template>
-  <!-- arayüzü düzenlenecek -->
   <div v-if="companyData" class="w-full flex lg:flex-col-reverse items-start gap-[20px]">
     <div class="w-full flex flex-col gap-[20px] items-start text-justify">
-      <h1 class="text-[1.75rem] xl:text-[1.5rem] md:text-[1.25rem] font-medium text-main dark:text-white w-full pb-[4px] border-b-[1px] border-main-shadow dark:border-second-shadow">Rent<span class="text-second font-semibold">E</span>ren: Yolculuğunuz Bizimle Başlar...</h1>
+      <h1 class="text-[1.75rem] xl:text-[1.5rem] md:text-[1.25rem] font-medium text-main dark:text-second w-full pb-[4px] border-b-[1px] border-main-shadow dark:border-second-shadow">{{ companyData.about.header }}</h1>
       <span class="text-[1.25rem] md:text-[1.1rem] text-main leading-[40px] pt-[10px] pr-[30px] md:pt-[0px] md:pr-[4px] md:pl-[4px] dark:text-white">{{ companyData.about.description }}</span>
+      <h1 class="text-[1.75rem] xl:text-[1.5rem] md:text-[1.25rem] font-medium text-main dark:text-second w-full pb-[4px] border-b-[1px] border-main-shadow dark:border-second-shadow">Vizyonumuz</h1>
+      <span class="text-[1.25rem] md:text-[1.1rem] text-main leading-[40px] pt-[10px] pr-[30px] md:pt-[0px] md:pr-[4px] md:pl-[4px] dark:text-white">{{ companyData.about.vision }}</span>
+      <h1 class="text-[1.75rem] xl:text-[1.5rem] md:text-[1.25rem] font-medium text-main dark:text-second w-full pb-[4px] border-b-[1px] border-main-shadow dark:border-second-shadow">Misyonumuz</h1>
+      <span class="text-[1.25rem] md:text-[1.1rem] text-main leading-[40px] pt-[10px] pr-[30px] md:pt-[0px] md:pr-[4px] md:pl-[4px] dark:text-white">{{ companyData.about.mission }}</span>
     </div>
     <img class="w-[50%] h-[85vh] lg:w-full lg:h-[auto] lg:max-h-[370px] object-cover rounded-[10px]" :src=getCompanyImage(companyData.about.img) :alt=companyData.name>
   </div>
