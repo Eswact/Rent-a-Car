@@ -27,9 +27,15 @@ const getSimilarCars = async () => {
 //Payment Modal
 const openPaymentModal = () => {
   document.getElementById('paymentModal').classList.add('open');
+  document.querySelector('.userInfoSection').classList.remove('close');
+  document.querySelector('.paymentSection').classList.remove('open');
 };
 const closePaymentModal = () => {
   document.getElementById('paymentModal').classList.remove('open');
+};
+const movePayment = () => {
+  document.querySelector('.userInfoSection').classList.add('close');
+  document.querySelector('.paymentSection').classList.add('open');
 };
 const paymentProcess = () => {
   toast.error("Ödeme işlemi gerçekleşmedi!");
@@ -171,10 +177,45 @@ onMounted(() => {
   <div id="paymentModal" class="z-20 fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.8)] justify-center items-center">
     <div class="bg-white w-[600px] rounded-[10px] relative border-[1px] border-main-shadow shadow-lg shadow-main-shadow max-w-[95%]">
         <div class="justify-between items-center px-[16px] py-[10px] border-b-[1px] shadow-md border-main-shadow">
-            <h1 class="text-[20px] text-main font-[600]">Kart Bilgilerinizi Giriniz</h1>
+            <h1 class="text-[20px] text-main font-[600]">Bilgilerinizi Giriniz</h1>
             <button class="absolute top-[-11px] right-[-13px] text-second" @click="closePaymentModal"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
         </div>
-        <form class="flex flex-col gap-[10px] p-[10px]" method="POST" @submit.prevent="paymentProcess">
+        <form class="userInfoSection flex-col gap-[10px] p-[10px]" method="POST" @submit.prevent="movePayment">
+            <div class="flex flex-col">   
+              <div class="flex justify-between w-full">
+                <div class="flex flex-col p-[6px] w-[50%]">
+                  <input placeholder="Adınız" id="name" type="text" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+                </div>
+                <div class="flex flex-col p-[6px] w-[50%]">
+                  <input placeholder="Soyadınız" id="surname" type="text" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+                </div>
+              </div>
+              <div class="flex flex-col p-[6px]">
+                <label class="text-[14px] h-[20px] text-second" for="tcNo">T.C. Kimlik Numarası:</label>
+                <input id="tcNo" type="number" maxlength="11" placeholder="x x x x x x x x x x" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+              </div>
+              <div class="flex flex-col p-[6px]">
+                <label class="text-[14px] h-[20px] text-second" for="driveLicence">Ehliyet Numarası:</label>
+                <input id="driveLicence" type="number" maxlength="6" placeholder="x x x x x x" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+              </div>
+              <div class="flex justify-between w-full">
+                <div class="flex flex-col p-[6px] w-[50%]">
+                  <label class="text-[14px] h-[20px] text-second" for="bornDate">Doğum Tarihi:</label>
+                  <input id="bornDate" type="date" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+                </div>
+                <div class="flex flex-col p-[6px] w-[50%]">
+                  <label class="text-[14px] h-[20px] text-second" for="phoneNumber">Telefon Numarası:</label>
+                  <input id="phoneNumber" type="tel" placeholder="500 000 00 00" pattern="[0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}" class="h-[33.5px] border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+                </div>
+              </div>
+              <div class="flex flex-col p-[6px]">
+                <label class="text-[14px] h-[20px] text-second" for="eMail">E-Mail:</label>
+                <input id="eMail" type="email" placeholder="example@mail.com" class="border-b-[1px] border-main-shadow placeholder:text-main text-main p-[4px]" required>
+              </div>
+            </div>
+            <div class="flex justify-center items-center px-[4px]"><button type="sumbit" class="w-full bg-second py-[8px] px-[16px] text-[17px] text-white rounded-[6px]">Ödemeye Geç</button></div>
+        </form>
+        <form class="paymentSection flex-col gap-[10px] p-[10px]" method="POST" @submit.prevent="paymentProcess">
             <div class="flex flex-col">
               <div class="flex flex-col p-[6px]">
                 <label class="text-[14px] h-[20px] text-second" for="creditCard">Kart Numarası:</label>
@@ -227,5 +268,17 @@ onMounted(() => {
   }
   #paymentModal.open {
     display: flex;
+  }
+  .paymentSection {
+    display: none;
+  }
+  .paymentSection.open {
+    display: flex;
+  }
+  .userInfoSection {
+    display: flex;
+  }
+  .userInfoSection.close {
+    display: none;
   }
 </style>
