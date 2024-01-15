@@ -93,12 +93,12 @@ function applyFilters() {
     <div class="flex items-center flex-wrap gap-x-[40px] gap-y-[20px] md:justify-center">
       <input v-model="searchTerm" id="carNameFilter" type="search" placeholder="Aradığınız Araba" class="w-[160px] text-center text-[17px] text-[#333] dark:text-[#eee] bg-transparent placeholder-[#333] dark:placeholder-[#eee] focus:text-left focus:placeholder-transparent dark:focus:placeholder-transparent dark:border-[#ddd] focus:outline-none focus:border-b-[1px] border-[#555]" />
       <select v-model="selectedBrand" name="brands" id="brandFilter" class="w-[160px] text-[17px] text-[#333] dark:text-[#eee] bg-transparent">
-        <option value=0>Marka Seçimi</option>
-        <option v-for="brand in brands" :key="brand.brandId" :value="brand.brandId">{{ brand.name }}</option>
+        <option class="dark:text-black" value=0>Marka Seçimi</option>
+        <option class="dark:text-black" v-for="brand in brands" :key="brand.brandId" :value="brand.brandId">{{ brand.name }}</option>
       </select>
       <select v-model="selectedCategory" name="categories" id="categoryFilter" class="w-[160px] text-[17px] text-[#333] dark:text-[#eee] bg-transparent">
-        <option value=0>Kategori Seçimi</option>
-        <option v-for="category in categories" :key="category.catId" :value="category.catId">{{ category.name }}</option>
+        <option class="dark:text-black" value=0>Kategori Seçimi</option>
+        <option class="dark:text-black" v-for="category in categories" :key="category.catId" :value="category.catId">{{ category.name }}</option>
       </select>
     </div>
     <button id="clearFilter" class="text-[18px] font-[600] bg-[#ee5d5d1e] text-second border-second border-[1px] py-[3px] px-[8px] rounded-[10px]">Temizle</button>
