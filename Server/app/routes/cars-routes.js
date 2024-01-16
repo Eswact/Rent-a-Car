@@ -9,7 +9,7 @@ router.get("/detail/:id", cars.getCarDetail);
 // Create a new Car
 router.post("/create", cars.create);
 // Update a Car with id
-router.put("/update/:id", cars.update);
+router.post("/update/:id", cars.update);
 // Delete a Car with id
 router.post("/delete/:id", cars.delete);
 // Delete all Cars

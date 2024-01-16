@@ -56,7 +56,37 @@ exports.create = async (req, res) => {
 };
 
 // Update a car by the id in the request
-exports.update = (req, res) => {};
+exports.update = async (req, res) => {
+  console.log(req.body)
+  try {
+    const carId = req.params.id;
+    const updateCarData = {
+      title: req.body.title,
+      brand: req.body.brand,
+      category: req.body.category,
+      image: req.body.images[0]
+    }
+    const updateDetailData = req.body;
+    const updatedCar = await cars.findOneAndUpdate(
+      { carId: carId },
+      { $set: updateCarData },
+      { new: true }
+    );
+    const updatedCarDetail = await carDetails.findOneAndUpdate(
+      { carId: carId },
+      { $set: updateDetailData },
+      { new: true }
+    );
+    if (!updatedCar || !updatedCarDetail) {
+      return res.status(404).json({ message: 'Car not found' });
+    }
+    res.json(updateDetailData);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Some error occurred while updating Car."
+    });
+  }
+};
 
 // Delete a car with the specified id in the request
 exports.delete = async (req, res) => {

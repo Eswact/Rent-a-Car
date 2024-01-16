@@ -280,6 +280,58 @@
         });
         closeCarModal();
     };
+    const editCar = () => {
+        const files = document.getElementById('fileInputCar').files;
+        let images = [];
+        if (files.length != 0) {
+            const formData = new FormData();       
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+                images.push(files[i].name);
+            }
+            postFormData('admin/addCarImage', formData, function () {
+                console.log('Başarılı');
+            }, function (error) {
+                console.error('Bir hata oluştu:', error);
+            });
+        }
+        else {
+            images = selectedImages.value.map((image) => {
+                return image.split('/').pop();
+            });
+            console.log(images);
+        }
+        let carId = document.querySelector('.editCarBut').dataset.id;
+        postData(`cars/update/${carId}`, {
+            images: images,
+            title: `${document.getElementById('brandSelect').options[document.querySelector('#brandSelect').selectedIndex].dataset.name} ${document.getElementById('carModel').value}`,
+            brand: document.getElementById('brandSelect').value,
+            category: document.getElementById('categorySelect').value,
+            model: {
+                name: document.getElementById('carModel').value,
+                year: document.getElementById('carYear').value
+            },
+            description: document.getElementById('carDescription').value,
+            people: document.getElementById('carPeople').value,
+            capacity: document.getElementById('carCapacity').value,
+            gasoline: document.getElementById('carGasoline').value,
+            kilometer: document.getElementById('carKilometer').value,
+            age: document.getElementById('carAge').value,
+            payment: 1,
+            dailyPrice: document.getElementById('carDailyPrice').value
+        }, function () {
+            toast.success("Araba Güncellendi", {
+                timeout: 3000
+            });
+        }, function () {
+            toast.error("Araba Güncellenirken Hata", {
+                timeout: 3000
+            });
+        }).then(() => {
+            getCars();
+        });
+        closeCarModal();
+    };
     const deleteCar = (carId) => {
         postData(`cars/delete/${carId}`, {}, function () {
             toast.success("Araba Kaldırıldı", {
@@ -293,8 +345,41 @@
             getCars();
         });
     };
-    const openCarModal = () => {
+    const openCarModal = (isEdit, carId) => {
         document.getElementById('carModal').classList.add('open');
+        if (isEdit) {
+            document.querySelector('.editCarBut').classList.add('open');
+            document.querySelector('.addCarBut').classList.add('close');
+            document.querySelector('.editCarBut').dataset.id = carId;
+            fetchData(
+                `cars/detail/${carId}`,
+                async (data) => {
+                    console.log(data);
+                    document.getElementById('categorySelect').value = data.category;
+                    document.getElementById('brandSelect').value = data.brand;
+                    document.getElementById('carModel').value = data.model.name;
+                    document.getElementById('carYear').value = data.model.year;
+                    document.getElementById('carDescription').value = data.description;
+                    document.getElementById('carPeople').value = data.people;
+                    document.getElementById('carCapacity').value = data.capacity;
+                    document.getElementById('carGasoline').value = data.gasoline;
+                    document.getElementById('carKilometer').value = data.kilometer;
+                    document.getElementById('carAge').value = data.age;
+                    document.getElementById('carDailyPrice').value = data.dailyPrice;
+                    let images = data.images.map((image) => {
+                        return getCarImage(image);
+                    });
+                    selectedImages.value = images;
+                },
+                (error) => {
+                    console.error('Bir hata oluştu:', error);
+                }
+            );
+        }
+        else {
+            document.querySelector('.editCarBut').classList.remove('open');
+            document.querySelector('.addCarBut').classList.remove('close');
+        }
     };
     const closeCarModal = () => {
         document.getElementById('carModal').classList.remove('open');
@@ -451,14 +536,17 @@
             <hr class="mb-[10px]">
             <div class="flex items-center justify-center gap-[10px] flex-wrap p-[10px]">
                 <div v-for="car in cars" :key="car.id" class="itemCard car-card rounded-[12px] border-[1px] border-main w-[228px] p-[10px] flex flex-col gap-[8px] bg-white shadow-md shadow-main-shadow relative cursor-pointer">
-                    <button @click="deleteCar(car.carId)" class="gelatine deleteItem absolute top-[4px] right-[4px] py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
+                    <div class="absolute top-[4px] right-[4px] flex items-center gap-[4px]">
+                        <button @click="openCarModal(true, car.carId)" class="gelatine editItem py-[1px] px-[8px] text-white bg-[#e79757] rounded-[10px]"><font-awesome-icon :icon="['fas', 'pen']"/></button>
+                        <button @click="deleteCar(car.carId)" class="gelatine deleteItem py-[1px] px-[8px] text-white bg-second rounded-[10px]"><font-awesome-icon :icon="['fas', 'trash-can']"/></button>
+                    </div>
                     <img v-if="getBrand(car.brand)" class="absolute top-[12px] left-[12px] w-[30px]" :src="getBrand(car.brand).logo" :alt="getBrand(car.brand).name" :title="getBrand(car.brand).name">
                     <img class="h-[90px] object-contain" :src="getCarImage(car.image)" :alt="car.title">
                     <div class="flex justify-center items-center px-[10px] pt-[8px] border-t-[1px] border-t-main">
                         <span class="text-[18px] text-center text-main">{{ car.title }}</span>
                     </div>
                 </div>
-                <div @click="openCarModal" class="w-[228px] h-[156px] rounded-[10px] overflow-hidden border-[1px] border-main bg-main-shadow flex justify-center items-center cursor-pointer">
+                <div @click="openCarModal(false)" class="w-[228px] h-[156px] rounded-[10px] overflow-hidden border-[1px] border-main bg-main-shadow flex justify-center items-center cursor-pointer">
                     <div class="border-main border-[2px] rounded-[50%] text-main bg-white w-[50px] h-[50px] shadow-sm shadow-main flex justify-center items-center">
                         <font-awesome-icon icon="fa-solid fa-plus" size="2xl"/>
                     </div>
@@ -621,7 +709,8 @@
                     <input id="carAge" type="number" placeholder="Yaş Sınırı" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                     <input id="carDailyPrice" type="number" placeholder="Günlük Ücret" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
                 </div>
-                <div class="flex justify-center items-center"><button type="button" @click="saveNewCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
+                <div class="addCarBut justify-center items-center"><button type="button" @click="saveNewCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
+                <div class="editCarBut justify-center items-center"><button type="button" @click="editCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Güncelle</button></div>
             </form>
         </div>
     </div>
@@ -632,6 +721,13 @@
         opacity: 1;
     }
     .deleteItem {
+        transition: all 0.3s ease;
+        opacity: 0;
+    }
+    .itemCard:hover .editItem {
+        opacity: 1;
+    }
+    .editItem {
         transition: all 0.3s ease;
         opacity: 0;
     }
@@ -677,5 +773,17 @@
     .adminTabs span.selected {
         background-color: #EE605F;
         color: white;
+    }
+    .editCarBut {
+        display: none;
+    }
+    .editCarBut.open {
+        display: flex;
+    }
+    .addCarBut {
+        display: flex;
+    }
+    .addCarBut.close {
+        display: none;
     }
 </style>
