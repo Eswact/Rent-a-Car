@@ -1,10 +1,7 @@
 import axios from 'axios';
-
 const apiClient = axios.create({
   baseURL: 'http://localhost:3000/api/',
-  // Diğer axios yapılandırma seçenekleri
 });
-
 // BASIC GET
 const fetchData = async (endpoint, onSuccess, onError) => {
   try {
@@ -14,7 +11,6 @@ const fetchData = async (endpoint, onSuccess, onError) => {
     onError(error);
   }
 };
-
 // BASIC POST
 const postData = async (endpoint, data, onSuccess, onError) => {
   try {
@@ -24,7 +20,6 @@ const postData = async (endpoint, data, onSuccess, onError) => {
     onError(error);
   }
 };
-
 // PROMISE GET
 const fetchDataPromise = (endpoint) => {
   return new Promise((resolve, reject) => {
@@ -33,7 +28,6 @@ const fetchDataPromise = (endpoint) => {
       .catch(error => reject(error));
   });
 };
-
 // POST FORM DATA
 const postFormData = async (endpoint, formData, onSuccess, onError) => {
   try {
@@ -47,5 +41,4 @@ const postFormData = async (endpoint, formData, onSuccess, onError) => {
     onError(error);
   }
 };
-
 export { fetchData, postData, fetchDataPromise, postFormData };
