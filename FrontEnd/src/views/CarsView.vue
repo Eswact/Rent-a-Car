@@ -52,20 +52,15 @@ onMounted(() => {
   }
 
   fetchCars().then(() => {
-    // car-search
     watch(searchTerm, () => {
       applyFilters();
     });
-
-    // brand-select
     watch(selectedBrand, () => {
       applyFilters();
     });
-
     watch(selectedCategory, () => {
       applyFilters();
     });
-
     applyFilters();
   });
 

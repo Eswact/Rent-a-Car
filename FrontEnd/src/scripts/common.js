@@ -1,5 +1,7 @@
 import { fetchData } from '../scripts/ajax.js'
 
+const baseUrl = 'http://localhost:3000/uploads';
+
 const getDetailsPage = (router, carId) => {
     router.push({ path: `/detail/${carId}` });
 };
@@ -36,14 +38,14 @@ fetchData(`categories/published`,
 );
 
 function getCarImage(filename) {
-    return `http://localhost:3000/uploads/cars/${filename}`;
+    return `${baseUrl}/cars/${filename}`;
 };
 
 function getBrand (brandId) {
     const brand = brandList.find(x => x.brandId === brandId);
     return brand
     ? {
-        logo: `http://localhost:3000/uploads/brands/${brand.logo}`,
+        logo: `${baseUrl}/brands/${brand.logo}`,
         name: brand.name,
       }
     : null;
@@ -57,15 +59,15 @@ function getCategory (catId) {
 };
 
 function getBrandImage(filename) {
-    return `http://localhost:3000/uploads/brands/${filename}`;
+    return `${baseUrl}/brands/${filename}`;
 }
 
 function getCompanyImage(filename) {
-    return `http://localhost:3000/uploads/company/${filename}`;
+    return `${baseUrl}/company/${filename}`;
 };
 
 function getBannerImage(filename) {
-    return `http://localhost:3000/uploads/banners/${filename}`;
+    return `${baseUrl}/banners/${filename}`;
 };
 
 function convert2Price(value) {
