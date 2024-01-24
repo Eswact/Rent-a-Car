@@ -91,6 +91,29 @@
             e.value = 0;
         });
     };
+    function isVisible(element) {
+        return element.offsetWidth > 0 || element.offsetHeight > 0;
+    }
+    function controlInputs() {
+        var requiredInputs = document.querySelectorAll('.requiredInputs');
+        var requiredSelects = document.querySelectorAll('.requiredSelects');
+        for (var i = 0; i < requiredInputs.length; i++) {
+            if (isVisible(requiredInputs[i])) {
+                if (requiredInputs[i].value === null || requiredInputs[i].value.trim() === "") {
+                    return false;
+                }
+            }
+        }
+        for (var j = 0; j < requiredSelects.length; j++) {
+            if (isVisible(requiredSelects[j])) {
+                if (requiredSelects[j].value == "0") {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     
     //Banners
     const getBanners = async () => {
@@ -105,31 +128,39 @@
         );
     };
     const saveNewBanner = () => {
+        let control = controlInputs();
         const file = document.getElementById('fileInputBanner').files[0];
-        postFormData('admin/addBannerImage', {
-            file: file
-        }, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
-        });
-        postData('home/banners/create', {
-            src: file.name,
-            alt: file.name,
-            title: document.getElementById('bannerHeader').value,
-            description: document.getElementById('bannerDescription').value
-        }, function () {
-            toast.success("Yeni Afiş Eklendi", {
+        if (control && file) {
+            postFormData('admin/addBannerImage', {
+                file: file
+            }, function () {
+                console.log('Başarılı');
+            }, function (error) {
+                console.error('Bir hata oluştu:', error);
+            });
+            postData('home/banners/create', {
+                src: file.name,
+                alt: file.name,
+                title: document.getElementById('bannerHeader').value,
+                description: document.getElementById('bannerDescription').value
+            }, function () {
+                toast.success("Yeni Afiş Eklendi", {
+                    timeout: 3000
+                });
+            }, function () {
+                toast.error("Yeni Afiş Eklenirken Hata", {
+                    timeout: 3000
+                });
+            }).then(() => {
+                getBanners();
+            });
+            closeBannerModal();
+        }
+        else {
+            toast.error("Lütfen tüm alanları doldurunuz.", {
                 timeout: 3000
             });
-        }, function () {
-            toast.error("Yeni Afiş Eklenirken Hata", {
-                timeout: 3000
-            });
-        }).then(() => {
-            getBanners();
-        });
-        closeBannerModal();
+        }
     };
     const deleteBanner = (bannerId) => {
         postData(`home/banners/delete/${bannerId}`, {}, function () {
@@ -166,29 +197,37 @@
         );
     };
     const saveNewBrand = () => {
+        let control = controlInputs();
         const file = document.getElementById('fileInputBrand').files[0];
-        postFormData('admin/addBrandImage', {
-            file: file
-        }, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
-        });
-        postData('brands/create', {
-            name: document.getElementById('brandName').value,
-            logo: file.name
-        }, function () {
-            toast.success("Yeni Marka Eklendi", {
+        if (control && file) { 
+            postFormData('admin/addBrandImage', {
+                file: file
+            }, function () {
+                console.log('Başarılı');
+            }, function (error) {
+                console.error('Bir hata oluştu:', error);
+            });
+            postData('brands/create', {
+                name: document.getElementById('brandName').value,
+                logo: file.name
+            }, function () {
+                toast.success("Yeni Marka Eklendi", {
+                    timeout: 3000
+                });
+            }, function () {
+                toast.error("Yeni Marka Eklenirken Hata", {
+                    timeout: 3000
+                });
+            }).then(() => {
+                getBrands();
+            });
+            closeBrandModal();
+        }
+        else {
+            toast.error("Lütfen tüm alanları doldurunuz.", {
                 timeout: 3000
             });
-        }, function () {
-            toast.error("Yeni Marka Eklenirken Hata", {
-                timeout: 3000
-            });
-        }).then(() => {
-            getBrands();
-        });
-        closeBrandModal();
+        }
     };
     const deleteBrand = (brandId) => {
         postData(`brands/delete/${brandId}`, {}, function () {
@@ -237,48 +276,56 @@
         );
     };
     const saveNewCar = () => {
+        let control = controlInputs();
         const files = document.getElementById('fileInputCar').files;
-        const formData = new FormData();
-        let images = [];
-        for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i]);
-            images.push(files[i].name);
+        if (control && files.length != 0) {
+            const formData = new FormData();
+            let images = [];
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+                images.push(files[i].name);
+            }
+            console.log(images);
+            postFormData('admin/addCarImage', formData, function () {
+                console.log('Başarılı');
+            }, function (error) {
+                console.error('Bir hata oluştu:', error);
+            });
+            postData('cars/create', {
+                images: images,
+                title: `${document.getElementById('brandSelect').options[document.querySelector('#brandSelect').selectedIndex].dataset.name} ${document.getElementById('carModel').value}`,
+                brand: document.getElementById('brandSelect').value,
+                category: parseInt(document.getElementById('categorySelect').value),
+                model: {
+                    name: document.getElementById('carModel').value,
+                    year: document.getElementById('carYear').value
+                },
+                description: document.getElementById('carDescription').value,
+                people: document.getElementById('carPeople').value,
+                capacity: document.getElementById('carCapacity').value,
+                gasoline: document.getElementById('carGasoline').value,
+                kilometer: document.getElementById('carKilometer').value,
+                age: document.getElementById('carAge').value,
+                payment: 1,
+                dailyPrice: document.getElementById('carDailyPrice').value
+            }, function () {
+                toast.success("Yeni Araba Eklendi", {
+                    timeout: 3000
+                });
+            }, function () {
+                toast.error("Yeni Araba Eklenirken Hata", {
+                    timeout: 3000
+                });
+            }).then(() => {
+                getCars();
+            });
+            closeCarModal();
         }
-        console.log(images);
-        postFormData('admin/addCarImage', formData, function () {
-            console.log('Başarılı');
-        }, function (error) {
-            console.error('Bir hata oluştu:', error);
-        });
-        postData('cars/create', {
-            images: images,
-            title: `${document.getElementById('brandSelect').options[document.querySelector('#brandSelect').selectedIndex].dataset.name} ${document.getElementById('carModel').value}`,
-            brand: document.getElementById('brandSelect').value,
-            category: document.getElementById('categorySelect').value,
-            model: {
-                name: document.getElementById('carModel').value,
-                year: document.getElementById('carYear').value
-            },
-            description: document.getElementById('carDescription').value,
-            people: document.getElementById('carPeople').value,
-            capacity: document.getElementById('carCapacity').value,
-            gasoline: document.getElementById('carGasoline').value,
-            kilometer: document.getElementById('carKilometer').value,
-            age: document.getElementById('carAge').value,
-            payment: 1,
-            dailyPrice: document.getElementById('carDailyPrice').value
-        }, function () {
-            toast.success("Yeni Araba Eklendi", {
+        else {
+            toast.error("Lütfen tüm alanları doldurunuz.", {
                 timeout: 3000
             });
-        }, function () {
-            toast.error("Yeni Araba Eklenirken Hata", {
-                timeout: 3000
-            });
-        }).then(() => {
-            getCars();
-        });
-        closeCarModal();
+        }
     };
     const editCar = () => {
         const files = document.getElementById('fileInputCar').files;
@@ -306,7 +353,7 @@
             images: images,
             title: `${document.getElementById('brandSelect').options[document.querySelector('#brandSelect').selectedIndex].dataset.name} ${document.getElementById('carModel').value}`,
             brand: document.getElementById('brandSelect').value,
-            category: document.getElementById('categorySelect').value,
+            category: parseInt(document.getElementById('categorySelect').value),
             model: {
                 name: document.getElementById('carModel').value,
                 year: document.getElementById('carYear').value
@@ -430,7 +477,8 @@
                 fax: document.getElementById('companyFax').value,
                 mail: document.getElementById('companyMail').value,
                 address: document.getElementById('companyAddress').value,
-                img: fileContact ? fileContact.name : contactData.value.img
+                img: fileContact ? fileContact.name : contactData.value.img,
+                link: document.getElementById('companyLink').value
             },
             about: {
                 header: document.getElementById('aboutHeader').value,
@@ -591,7 +639,7 @@
                     <input :value="contactData.mail" type="email" id="companyMail" placeholder="Email" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
                     <textarea :value="contactData.address" id="companyAddress" placeholder="Adres" class="border-[1px] rounded-[6px] px-[12px] py-[6px] min-h-[80px]"></textarea>
                     <input type="file" id="fileInputContact" ref="fileInputContact" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp">
-                    <div id="ContactImage" class="w-full h-[300px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
+                    <div id="ContactImage" class="w-full h-[260px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                         <div v-if="!selectedImageContact" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
                             <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
                             <font-awesome-icon icon="fa-solid fa-upload" size="xl" />
@@ -601,6 +649,7 @@
                             <img :src="selectedImageContact" alt="Contact" class="w-full h-full object-cover">
                         </div>
                     </div>
+                    <input :value="contactData.link" type="text" id="companyLink" placeholder="Link" class="border-[1px] rounded-[6px] px-[12px] py-[4px]">
                 </div>
                 <button @click="updateCompany()" class="w-[420px] md:w-[90%] pb-[6px] pt-[2px] border-[1px] rounded-[20px] border-second-shadow shadow-md shadow-second-shadow bg-second text-white text-[22px] font-bold">Kaydet</button>
             </div>
@@ -618,7 +667,7 @@
             </div>
             <form class="flex flex-col gap-[10px] p-[10px]" enctype="multipart/form-data" method="POST">
                 <div class="containImageSelector relative">
-                    <input type="file" id="fileInputBanner" ref="fileInputBanner" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp" required>
+                    <input type="file" id="fileInputBanner" ref="fileInputBanner" @change="handleFileChange" class="formInputs requiredInputs hidden" accept=".jpg, .jpeg, .png, .webp" required>
                     <div class="w-full h-[240px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                         <div v-if="!selectedImage" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
                             <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
@@ -629,9 +678,9 @@
                         </div>
                     </div>
                 </div>
-                <input type="text" id="bannerHeader" placeholder="Başlık giriniz..." class="formInputs border-[1px] rounded-[6px] px-[12px] py-[4px]" required>
+                <input type="text" id="bannerHeader" placeholder="Başlık giriniz..." class="formInputs requiredInputs border-[1px] rounded-[6px] px-[12px] py-[4px]" required>
                 <textarea name="description" id="bannerDescription" placeholder="Açıklama giriniz..." class="formInputs border-[1px] rounded-[6px] px-[12px] py-[4px]"></textarea>
-                <div class="flex justify-center items-center"><button type="button" @click="saveNewBanner" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
+                <div class="flex justify-center items-center"><button type="sumbit" @click="saveNewBanner" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
             </form>
         </div>
     </div>
@@ -644,7 +693,7 @@
             </div>
             <form class="flex flex-col gap-[10px] p-[10px]" enctype="multipart/form-data" method="POST">
                 <div class="containImageSelector relative">
-                    <input type="file" id="fileInputBrand" ref="fileInputBrand" @change="handleFileChange" class="formInputs hidden" accept=".jpg, .jpeg, .png, .webp" required>
+                    <input type="file" id="fileInputBrand" ref="fileInputBrand" @change="handleFileChange" class="formInputs requiredInputs hidden" accept=".jpg, .jpeg, .png, .webp" required>
                     <div class="w-full h-[240px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                         <div v-if="!selectedImage" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
                             <span class="text-[18px]">Resim seçin veya sürükleyip bırakın</span>
@@ -655,8 +704,8 @@
                         </div>
                     </div>
                 </div>
-                <input type="text" id="brandName" placeholder="Marka adı giriniz..." class="formInputs border-[1px] rounded-[6px] px-[12px] py-[4px]" required>
-                <div class="flex justify-center items-center"><button type="button" @click="saveNewBrand" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
+                <input type="text" id="brandName" placeholder="Marka adı giriniz..." class="formInputs requiredInputs border-[1px] rounded-[6px] px-[12px] py-[4px]" required>
+                <div class="flex justify-center items-center"><button type="sumbit" @click="saveNewBrand" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
             </form>
         </div>
     </div>
@@ -668,7 +717,7 @@
                 <button class="absolute top-[-11px] right-[-13px] text-second" @click="closeCarModal"><font-awesome-icon :icon="['fas', 'circle-xmark']" size="2xl" class="bg-white rounded-[50%] shadow-lg shadow-second-shadow"/></button>
             </div>
             <form class="flex flex-col gap-[10px] p-[10px]" action="/upload" method="post" enctype="multipart/form-data">
-                <input type="file" id="fileInputCar" ref="fileInputCar" name="files[]" @change="handleFileChange" accept=".jpg, .jpeg, .png, .webp" class="formInputs hidden" multiple>
+                <input type="file" id="fileInputCar" ref="fileInputCar" name="files[]" @change="handleFileChange" accept=".jpg, .jpeg, .png, .webp" class="formInputs hidden" multiple required>
                 <div class="w-full h-[240px] border-[1px] rounded-[6px] flex justify-center items-center cursor-pointer" @click="triggerFileInput" @dragover.prevent="handleDragOver" @drop.prevent="handleDrop">
                     <div v-if="!selectedImages" class="flex flex-col gap-[10px] justify-center items-center text-center text-second">
                         <span class="text-[18px]">Araba resimlerini seçmek için tıklayın</span>
@@ -678,26 +727,26 @@
                         <img v-for="image in selectedImages" :key="image" :src="image" alt="Selected Images" class="w-[50%] h-[50%] object-cover p-[2px]">
                     </div>
                 </div>
-                <select name="categories" id="categorySelect" class="formSelects w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
+                <select name="categories" id="categorySelect" class="formSelects requiredSelects w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]" required>
                     <option value=0 selected>Kategori Seçimi</option>
                     <option v-for="category in categories" :key="category.catId" :value="category.catId" :data-name="category.name">{{ category.name }}</option>
                 </select>
-                <select name="brands" id="brandSelect" class="formSelects w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]">
+                <select name="brands" id="brandSelect" class="formSelects requiredSelects w-full text-[17px] text-[#333] dark:text-[#eee] bg-transparent border-[1px] rounded-[6px] p-[4px]" required> 
                     <option value=0 selected>Marka Seçimi</option>
                     <option v-for="brand in brands" :key="brand.brandId" :value="brand.brandId" :data-name="brand.name">{{ brand.name }}</option>
                 </select>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carModel" type="text" placeholder="Model" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input id="carYear" type="number" placeholder="Sene" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carModel" type="text" placeholder="Model" class="formInputs requiredInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
+                    <input id="carYear" type="number" placeholder="Sene" class="formInputs requiredInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
                 </div>
                 <textarea id="carDescription" class="formInputs border-[1px] px-[12px] py-[6px] rounded-[6px]" placeholder="Açıklama"></textarea>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carPeople" type="number" placeholder="Kişi Kapasitesi" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input id="carCapacity" type="number" placeholder="Bagaj Kapasitesi" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carPeople" type="number" placeholder="Kişi Kapasitesi" class="formInputs requiredInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
+                    <input id="carCapacity" type="number" placeholder="Bagaj Kapasitesi" class="formInputs requiredInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carKilometer" type="number" placeholder="Kilometre" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <select id="carGasoline" class="formSelects w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carKilometer" type="number" placeholder="Kilometre" class="formInputs requiredInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
+                    <select id="carGasoline" class="formSelects requiredSelects w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
                         <option value="0" selected>Yakıt Seçimi</option>
                         <option value="1">Benzin</option>
                         <option value="2">Dizel</option>
@@ -706,8 +755,8 @@
                     </select>
                 </div>
                 <div class="w-full flex items-center gap-[2%]">
-                    <input id="carAge" type="number" placeholder="Yaş Sınırı" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
-                    <input id="carDailyPrice" type="number" placeholder="Günlük Ücret" class="formInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]">
+                    <input id="carAge" type="number" placeholder="Yaş Sınırı" class="formInputs requiredInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
+                    <input id="carDailyPrice" type="number" placeholder="Günlük Ücret" class="formInputs requiredInputs w-[49%] border-[1px] text-center p-[2px] rounded-[6px]" required>
                 </div>
                 <div class="addCarBut justify-center items-center"><button type="button" @click="saveNewCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Kaydet</button></div>
                 <div class="editCarBut justify-center items-center"><button type="button" @click="editCar" class="bg-second w-[120px] p-[4px] text-[17px] text-white rounded-[10px]">Güncelle</button></div>

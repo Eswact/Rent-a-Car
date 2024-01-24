@@ -77,10 +77,10 @@
 <template>
   <header v-if="$route.path !== '/login' && $route.path !== '/admin'"  class="z-10 bg-white dark:bg-dark fixed top-0 left-0 w-[85.4%] mx-[7.3%] full:w-[90%] full:mx-[5%] xl:w-full xl:mx-0 px-[20px] md:px-[10px] pt-[16px] md:pt-[10px] pb-[10px] border-b border-1 border-main dark:border-white text-xl lg:text-lg flex items-center justify-between overflow-hidden">
       <nav class="w-[90%] md:w-[auto] flex items-center gap-[5%] lg:gap-[20px] md:gap-[30px]">
-        <div class="flex items-center justify-center gap-[16px] lg:gap-[10px] md:gap-[16px]">
+        <RouterLink to="/" class="flex items-center justify-center gap-[16px] lg:gap-[10px] md:gap-[16px]">
           <img class="max-h-[68px] lg:max-h-[60px] md:max-h-[50px] rounded-[50%]" src="./assets/media/logo.jpg" alt="logo">
           <h1 class="text-[2rem] lg:text-[1.75rem] md:text-[1.5rem] sm:text-[1.75rem] font-medium text-main dark:text-white">Rent<span class="text-second font-semibold">E</span>ren</h1>
-        </div>
+        </RouterLink>
         <ul class="flex items-center gap-[28px] xl:gap-[10px] md:gap-[20px] text-main dark:text-white sm:hidden">
           <li :class="{ 'active': $route.path === '/' }"><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-home" /> <span class="md:hidden">Anasayfa</span></RouterLink></li>
           <li :class="{ 'active': $route.path === '/cars' || $route.path.includes('/detail/') }"><RouterLink class="w-full p-[10px] lg:p-[4px] flex items-center gap-[10px]" to="/cars"><font-awesome-icon class="text-[1.75rem] lg:text-[1.35rem] md:text-[1.5rem]" icon="fa-solid fa-car" /> <span class="md:hidden">Arabalar</span></RouterLink></li>

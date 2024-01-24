@@ -7,6 +7,7 @@ module.exports = mongoose => {
           images: Array,
           title: String,
           brand: Number,
+          category: Number,
           model: {
             name: String,
             year: Number

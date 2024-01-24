@@ -6,6 +6,7 @@ module.exports = mongoose => {
           carId: Number,
           title: String,
           brand: Number,
+          category: Number,
           image: String
         },
         { timestamps: true }

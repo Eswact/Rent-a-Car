@@ -43,15 +43,16 @@ db.mongoose
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Server." });
 });
-const carsRoutes = require("./app/routes/cars-routes");
-const brandsRoutes = require("./app/routes/brands-routes");
-const categoriesRoutes = require("./app/routes/categories-routes");
-const companyRoutes = require("./app/routes/company-routes");
-const homeRoutes = require("./app/routes/home-routes");
-const adminRoutes = require("./app/routes/admin-routes");
-app.use("/api/cars", carsRoutes);
-app.use("/api/brands", brandsRoutes);
-app.use("/api/categories", categoriesRoutes);
-app.use("/api/company", companyRoutes);
-app.use("/api/home", homeRoutes);
-app.use("/api/admin", adminRoutes);
+
+const routeModules = [
+  { path: "/api/cars", module: require("./app/routes/cars-routes") },
+  { path: "/api/brands", module: require("./app/routes/brands-routes") },
+  { path: "/api/categories", module: require("./app/routes/categories-routes") },
+  { path: "/api/company", module: require("./app/routes/company-routes") },
+  { path: "/api/home", module: require("./app/routes/home-routes") },
+  { path: "/api/admin", module: require("./app/routes/admin-routes") },
+];
+
+routeModules.forEach(({ path, module }) => {
+  app.use(path, module);
+});

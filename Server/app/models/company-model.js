@@ -9,7 +9,8 @@ module.exports = mongoose => {
                 fax: String,
                 mail: String,
                 address: String,
-                img: String
+                img: String,
+                link: String
             },
             about: {
                 header: String,

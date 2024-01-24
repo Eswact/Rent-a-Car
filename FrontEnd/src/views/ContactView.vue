@@ -80,9 +80,9 @@
           <div class="w-full flex items-center justify-start gap-[8px] border-b-[1px] pb-[10px]"><span class="text-second min-w-[60px] text-center"><font-awesome-icon icon="fa-solid fa-envelope" size="xl"/></span><span class="text-main dark:text-white"> {{ contactData.mail }}</span></div>
           <div class="w-full flex items-center justify-start gap-[8px] border-b-[1px] pb-[10px]"><span class="text-second min-w-[60px] text-center"><font-awesome-icon icon="fa-solid fa-location-dot" size="xl"/></span><span class="text-main dark:text-white"> {{ contactData.address }}</span></div>
         </div>
-        <div class="h-[218px] max-w-[100%] flex justify-center items-center">
+        <a :href="contactData.link" target="_blank" class="h-[218px] max-w-[100%] flex justify-center items-center">
           <img class="w-full h-full rounded-[10px] border-[1px] border-main shadow-lg shadow-main-shadow object-cover" :src="getCompanyImage(contactData.img)" alt="adres">
-        </div>
+        </a>
       </div>
     </div>
   </div>

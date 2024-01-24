@@ -107,7 +107,7 @@ function applyFilters() {
       <div class="flex justify-between items-center px-[10px] pt-[8px] border-t-[1px] border-t-main">
         <div class="flex flex-col">
           <span class="text-[20px] text-main">{{ car.title }}</span>
-          <span class="text-[14px] text-second">{{ getCategory(car.category) }} Araçlar</span>
+          <span v-if="getCategory(car.category)" class="text-[14px] text-second">{{ getCategory(car.category) }} Araçlar</span>
         </div>
         <button @click="getDetailsPage(router, car.carId)" class="gelatine text-[17px] border-1 border-second bg-second text-white p-[8px] rounded-[10px] shadow shadow-second-shadow">Detaylar <font-awesome-icon icon="fa-solid fa-circle-chevron-right" size="lg"/></button>
       </div>
